@@ -36,49 +36,28 @@ public:
 
     // Compare function
     int compare(Date d2) {
+        // Compare years
         if (this->year > d2.get_year()) {
             return 1;
         } else if (this->year < d2.get_year()) {
             return -1;
         } else {
+            // Compare months
             if (this->month > d2.get_month()) {
                 return 1;
             } else if (this->month < d2.get_month()) {
                 return -1;
             } else {
+                // Compare days
                 if (this->date > d2.get_date()) {
                     return 1;
                 } else if (this->date < d2.get_date()) {
                     return -1;
                 } else {
-                    return 0;
+                    return 0; // Both dates are equal
                 }
             }
         }
-    }
-
-    // Function to check if the date is valid
-    bool isValidDate() {
-        // Check if month is valid
-        if (month < 1 || month > 12) {
-            return false;
-        }
-
-        // Check if date is valid for the given month
-        int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-        // Check for leap year
-        bool isLeapYear = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-        if (isLeapYear && month == 2) {
-            days_in_month[1] = 29;  // February has 29 days in a leap year
-        }
-
-        // Validate day based on the month
-        if (date < 1 || date > days_in_month[month - 1]) {
-            return false;
-        }
-
-        return true;  // If all checks passed, the date is valid
     }
 };
 
@@ -124,21 +103,6 @@ public:
             }
         }
     }
-
-    // Function to check if the time is valid
-    bool isValidTime() {
-        // Check if hour is valid (0 - 23)
-        if (hour < 0 || hour > 23) {
-            return false;
-        }
-
-        // Check if minute is valid (0 - 59)
-        if (minute < 0 || minute > 59) {
-            return false;
-        }
-
-        return true;  // If both hour and minute are within valid ranges
-    }
 };
 
 
@@ -179,59 +143,43 @@ public:
 
 class Customer: public Person{
 protected:
+    string phoneNumber;
+    vector<Ticket> CustomerBookings;
 
 public:
     void Add_customer(){
 
     }
+    void login(){
+
+    }
+    void bookShow(Ticket ticket){
+        this->CustomerBookings.push_back(ticket);
+
+    }
+    void cancelBooking(Show show){
+        for(auto it=this->CustomerBookings.begin();it!=this->CustomerBookings.end();
+        ){
+            if(it->getShow().getMovieName()==show.getMovieName()){
+                it=this->CustomerBookings.erase(it);
+            }
+            else{
+                ++it;
+            }
+        }
+    }
+    
 };
 
-class Admin : public Person {
-protected:
+class Admin: public Person{
+    protected:
 
 public:
-    // Function to add a new admin
     void Add_admin(){
 
     }
-
-    // Function to remove an admin
-    void Remove_admin(){
-
-    }
-
-    // Function to modify admin details
-    void Modify_admin(){
-
-    }
-
-    // Function to manage theatres
-    void Add_theatre(){
-
-    }   // Adds a theatre
-    void Delete_theatre(){
-
-    } // Deletes a theatre
-
-    // Function to manage shows
-    void Add_show_to_theatre(){
-
-    } // Adds a show to a theatre
-
-    void delete_show_from_theatre(){
-
-    }
-
 };
 
-class Ticket{
-private:
-    int ticketprice;
-
-
-
-     
-};
 
 class Seat{
 private:
@@ -331,6 +279,36 @@ public:
         return this->movie_overview;
     }
 };
+
+class Ticket{
+    protected:
+        Seat seat;
+        Theatre theatre;
+        Show show;
+    public:
+        void setShow(Show show){
+            this->show=show;
+        }
+        void setSeat(Seat seat){
+            this->seat=seat;
+        }
+        void setTheatre(Theatre theatre){
+            this->theatre=theatre;
+        }
+        Seat getSeat(){
+            return seat;
+        }
+        Theatre getTheatre(){
+            return theatre;
+        }
+        Show getShow(){
+            return show;
+        }
+
+
+
+};
+
 
 class Theatre {
 protected:
