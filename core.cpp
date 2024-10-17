@@ -182,7 +182,7 @@ class Admin: public Person{
 
 public:
     void Add_admin(){
-
+        
     }
 };
 
