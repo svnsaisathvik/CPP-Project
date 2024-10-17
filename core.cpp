@@ -160,13 +160,13 @@ public:
         this->CustomerBookings.push_back(ticket);
 
     }
-    string getPhoneNumber(){
+    string get_PhoneNumber(){
         return this->phoneNumber;
     }
     void cancelBooking(Show show){
         for(auto it=this->CustomerBookings.begin();it!=this->CustomerBookings.end();
         ){
-            if(it->getShow().getMovieName()==show.getMovieName()){
+            if(it->get_Show().getMovieName()==show.getMovieName()){
                 it=this->CustomerBookings.erase(it);
             }
             else{
@@ -181,8 +181,13 @@ class Admin: public Person{
 protected:
 
 public:
-    void add_theatre(){
-
+    void add_theatre(string name,string location,string city,int capacity,string o_name,int rows,int columns){
+        Theatre *theatre1 = new Theatre();
+        theatre1->set_Name(name);
+        theatre1->set_Location(location);
+        theatre1->set_City(city);
+        theatre1->set_Capacity(capacity);
+        theatre1->set_OwnerName(o_name);
     }   
     void add_show(){
         
@@ -309,22 +314,22 @@ class Ticket{
         Theatre theatre;
         Show show;
     public:
-        void setShow(Show show){
+        void set_Show(Show show){
             this->show=show;
         }
-        void setSeat(Seat seat){
+        void set_Seat(Seat seat){
             this->seat=seat;
         }
-        void setTheatre(Theatre theatre){
+        void set_Theatre(Theatre theatre){
             this->theatre=theatre;
         }
-        Seat getSeat(){
+        Seat get_Seat(){
             return seat;
         }
-        Theatre getTheatre(){
+        Theatre get_Theatre(){
             return theatre;
         }
-        Show getShow(){
+        Show get_Show(){
             return show;
         }
 
@@ -347,76 +352,76 @@ protected:
 
 public:
     // Setter methods
-    void setName(string theatre_name) {
+    void set_Name(string theatre_name) {
         this->name = theatre_name;
     }
 
-    void setLocation(string theatre_location) {
+    void set_Location(string theatre_location) {
         this->location = theatre_location;
     }
 
-    void setCity(string theatre_city) {
+    void set_City(string theatre_city) {
         this->city = theatre_city;
     }
 
-    void setCapacity(int theatre_capacity) {
+    void set_Capacity(int theatre_capacity) {
         this->capacity = theatre_capacity;
     }
 
-    void setOwnerName(string owner) {
+    void set_OwnerName(string owner) {
         this->owner_name = owner;
     }
 
-    void setRows(int row_count) {
+    void set_Rows(int row_count) {
         this->rows = row_count;
     }
 
-    void setColumns(int column_count) {
+    void set_Columns(int column_count) {
         this->columns = column_count;
     }
 
-    void setSeatsTrack(vector<vector<Seat*>> seat_matrix) {
+    void set_SeatsTrack(vector<vector<Seat*>> seat_matrix) {
         this->seats_track = seat_matrix;
     }
 
-    void setShowsTrack(vector<vector<Show*>> show_matrix) {
+    void set_ShowsTrack(vector<vector<Show*>> show_matrix) {
         this->shows_track = show_matrix;
     }
 
     // Getter methods
-    string getName() {
+    string get_Name() {
         return this->name;
     }
 
-    string getLocation() {
+    string get_Location() {
         return this->location;
     }
 
-    string getCity() {
+    string get_City() {
         return this->city;
     }
 
-    int getCapacity() {
+    int get_Capacity() {
         return this->capacity;
     }
 
-    string getOwnerName() {
+    string get_OwnerName() {
         return this->owner_name;
     }
 
-    int getRows() {
+    int get_Rows() {
         return this->rows;
     }
 
-    int getColumns() {
+    int get_Columns() {
         return this->columns;
     }
 
-    vector<vector<Seat*>> getSeatsTrack() {
+    vector<vector<Seat*>> get_SeatsTrack() {
         return this->seats_track;
     }
 
-    vector<vector<Show*>> getShowsTrack() {
+    vector<vector<Show*>> get_ShowsTrack() {
         return this->shows_track;
     }
 };
@@ -427,14 +432,14 @@ protected:
     vector<Customer*> Customers;
     vector<Show> Movies;
 public:
-    void addTheatre(){
-        Theatre* theatre=new Theatre();
+    void add_Theatre(Theatre *theatre){
+        // Theatre* theatre=new Theatre();
         Theatres.push_back(theatre);
     }
     void add_movie(){
 
     }
-    void addNewCustomer(){
+    void add_NewCustomer(){
         string name;
         cout<<"Username:";
         cin>>name;
@@ -459,7 +464,7 @@ public:
         cout<<"Enter PhoneNumber:";
         cin>>phoneNumber;
         for(auto &it:Customers){
-            if(it->get_name()==name and it->getPhoneNumber()==phoneNumber){
+            if(it->get_name()==name and it->get_PhoneNumber()==phoneNumber){
                 found=true;
             }
         }
@@ -488,7 +493,7 @@ public:
             string movieName=Movies[index-1].getMovieName();
             cout<<"Select a date for the movie"<<endl;
             for(auto &theatre:Theatres){
-                for(auto &shows:theatre->getShowsTrack()){
+                for(auto &shows:theatre->get_ShowsTrack()){
                     for(auto &show:shows){
                         cout<<show->getMovieDate().get_date()<<endl;
                     }
@@ -497,7 +502,7 @@ public:
             int date;
             cin>>date;
             for(auto &theatre:Theatres){
-                for(auto &shows:theatre->getShowsTrack()){
+                for(auto &shows:theatre->get_ShowsTrack()){
                     for(auto &show:shows){
                         cout<<show->getMovieDate().get_date()<<endl;
                     }
