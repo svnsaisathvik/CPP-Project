@@ -178,12 +178,26 @@ public:
 };
 
 class Admin: public Person{
-    protected:
+protected:
 
 public:
-    void Add_admin(){
+    void add_theatre(){
+
+    }   
+    void add_show(){
         
     }
+
+    void delete_theatre(){
+
+    }
+    void delete_movie(){
+
+    }
+    void delete_show(){
+
+    }
+    
 };
 
 
@@ -408,90 +422,93 @@ public:
 };
 
 class Booking_Manager{
-    protected:
-        vector<Theatre*> Theatres;
-        vector<Customer*> Customers;
-        vector<Show> Movies;
-    public:
-        void addTheatre(){
-            Theatre* theatre=new Theatre();
-            Theatres.push_back(theatre);
+protected:
+    vector<Theatre*> Theatres;
+    vector<Customer*> Customers;
+    vector<Show> Movies;
+public:
+    void addTheatre(){
+        Theatre* theatre=new Theatre();
+        Theatres.push_back(theatre);
+    }
+    void add_movie(){
+
+    }
+    void addNewCustomer(){
+        string name;
+        cout<<"Username:";
+        cin>>name;
+        string email;
+        cout<<"Email Id:";
+        cin>>email;
+        int age;
+        cout<<"Enter your age:";
+        cin>>age;
+        string phoneNumber;
+        cout<<"Enter phone number:";
+        cin>>phoneNumber;
+        Customer* customer=new Customer(name,age,email,phoneNumber);
+        Customers.push_back(customer);
+        handleBooking();
+    }
+    void handleExistingCustomer(){
+        string name,phoneNumber;
+        bool found=false;
+        cout<<"Enter Username:";
+        cin>>name;
+        cout<<"Enter PhoneNumber:";
+        cin>>phoneNumber;
+        for(auto &it:Customers){
+            if(it->get_name()==name and it->getPhoneNumber()==phoneNumber){
+                found=true;
+            }
         }
-        void addNewCustomer(){
-            string name;
-            cout<<"Username:";
-            cin>>name;
-            string email;
-            cout<<"Email Id:";
-            cin>>email;
-            int age;
-            cout<<"Enter your age:";
-            cin>>age;
-            string phoneNumber;
-            cout<<"Enter phone number:";
-            cin>>phoneNumber;
-            Customer* customer=new Customer(name,age,email,phoneNumber);
-            Customers.push_back(customer);
+        if(!found){
+            cout<<"No User Exists with the current details"<<endl;
+            return;
+        }
+        else{
             handleBooking();
         }
-        void handleExistingCustomer(){
-            string name,phoneNumber;
-            bool found=false;
-            cout<<"Enter Username:";
-            cin>>name;
-            cout<<"Enter PhoneNumber:";
-            cin>>phoneNumber;
-            for(auto &it:Customers){
-                if(it->get_name()==name and it->getPhoneNumber()==phoneNumber){
-                    found=true;
+
+    }
+    void handleBooking(){
+        cout<<"Press 1 to book a movie"<<endl;
+        cout<<"Press 2 to check your previous bookings"<<endl;
+        int command;
+        cin>>command;
+        if(command==1){
+            cout<<"Select a movie(enter the serial number of the movie you want to book)"<<endl;
+            int i=1;
+            for(auto& movie:Movies){
+                cout<<i<<". "<<movie.getMovieName()<<endl;
+            }
+            int index;
+            cin>>index;
+            string movieName=Movies[index-1].getMovieName();
+            cout<<"Select a date for the movie"<<endl;
+            for(auto &theatre:Theatres){
+                for(auto &shows:theatre->getShowsTrack()){
+                    for(auto &show:shows){
+                        cout<<show->getMovieDate().get_date()<<endl;
+                    }
                 }
             }
-            if(!found){
-                cout<<"No User Exists with the current details"<<endl;
-                return;
+            int date;
+            cin>>date;
+            for(auto &theatre:Theatres){
+                for(auto &shows:theatre->getShowsTrack()){
+                    for(auto &show:shows){
+                        cout<<show->getMovieDate().get_date()<<endl;
+                    }
+                }
             }
-            else{
-                handleBooking();
-            }
+            
+            
+
 
         }
-        void handleBooking(){
-            cout<<"Press 1 to book a movie"<<endl;
-            cout<<"Press 2 to check your previous bookings"<<endl;
-            int command;
-            cin>>command;
-            if(command==1){
-                cout<<"Select a movie(enter the serial number of the movie you want to book)"<<endl;
-                int i=1;
-                for(auto& movie:Movies){
-                    cout<<i<<". "<<movie.getMovieName()<<endl;
-                }
-                int index;
-                cin>>index;
-                string movieName=Movies[index-1].getMovieName();
-                cout<<"Select a date for the movie"<<endl;
-                for(auto &theatre:Theatres){
-                    for(auto &shows:theatre->getShowsTrack()){
-                        for(auto &show:shows){
-                            cout<<show->getMovieDate().get_date()<<endl;
-                        }
-                    }
-                }
-                int date;
-                cin>>date;
-                for(auto &theatre:Theatres){
-                    for(auto &shows:theatre->getShowsTrack()){
-                        for(auto &show:shows){
-                            cout<<show->getMovieDate().get_date()<<endl;
-                        }
-                    }
-                }
-                
-                
-
-
-            }
-        }     
-        
+    }     
+    
 };
 
