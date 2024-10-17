@@ -1,6 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
+
+vector<Theatre*> Theatres;
+vector<Customer*> Customers;
+vector<string> Movies;
+// vector<Show*> all_shows;
+
 class Date {
 private:
     int date;
@@ -106,6 +113,21 @@ public:
 };
 
 
+bool compareTime(Time existingStart, Time existingEnd, Time newStart, Time newEnd) {
+    // No conflict if new show ends before or exactly when the existing show starts
+    if (newEnd.compare(existingStart) <= 0) {
+        return false;  // No conflict
+    }
+
+    // No conflict if new show starts after or exactly when the existing show ends
+    if (newStart.compare(existingEnd) >= 0) {
+        return false;  // No conflict
+    }
+
+    // Otherwise, there is a conflict
+    return true;
+}
+
 
 class Person{
 protected:
@@ -166,7 +188,7 @@ public:
     void cancelBooking(Show show){
         for(auto it=this->CustomerBookings.begin();it!=this->CustomerBookings.end();
         ){
-            if(it->get_Show().getMovieName()==show.getMovieName()){
+            if(it->get_Show().get_MovieName()==show.get_MovieName()){
                 it=this->CustomerBookings.erase(it);
             }
             else{
@@ -188,18 +210,117 @@ public:
         theatre1->set_City(city);
         theatre1->set_Capacity(capacity);
         theatre1->set_OwnerName(o_name);
+        theatre1->set_Rows(rows);
+        theatre1->set_Columns(columns);
+        Booking_Manager b;
+        b.add_Theatre(theatre1);
     }   
-    void add_show(){
-        
+    void add_show(string theatre_name, string m_name, Time start_time, Time end_time, Date date, string lang, string cast, string rating, string overview) {
+        Theatre *theatre1;
+        int changed = 0;
+
+        // Find the theatre by name
+        for (auto i : Theatres) {
+            if (theatre_name == i->get_Name()) {
+                theatre1 = i;
+                changed = 1;
+                break;
+            }
+        }
+
+        if (changed == 0) {
+            cout << "No such theatre exists" << endl;
+            return;
+        }
+
+        // Check for time conflicts with existing shows
+        for (auto existing_show : theatre1->get_ShowsTrack()) {
+            // Assuming compareTime is your function that checks for time overlap
+            if (date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same
+                if (compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
+                    cout << "Time conflict with another show!" << endl;
+                    return;
+                }
+            }
+        }
+
+        // If no conflict, proceed to add the show
+        Show *show1 = new Show;
+        show1->set_MovieName(m_name);
+        show1->set_MovieStartTime(start_time);
+        show1->set_MovieEndTime(end_time);
+        show1->set_MovieDate(date);
+        show1->set_Language(lang);
+        show1->set_Cast(cast);
+        show1->set_Rating(rating);
+        show1->set_MovieOverview(overview);
+
+        theatre1->add_show(show1);  // Add the show to the theatre
+        cout << "Show added successfully!" << endl;
     }
 
-    void delete_theatre(){
+
+    void delete_theatre(string theatre_name){
+        Theatre *theatre1;
+        int changed = 0;
+
+        // Find the theatre by name
+        int j=0;
+        for (auto i : Theatres) {
+            if (theatre_name == i->get_Name()) {
+                theatre1 = i;
+                changed = 1;
+                break;
+            }
+            j++;
+        }
+        if (changed == 0) {
+            cout << "No such theatre exists" << endl;
+            return;
+        }  
+        Theatres.erase(Theatres.begin()+j);
+        delete theatre1;
+    }
+    void delete_movie(string movie_name){
+        int j=0;
+        for(auto i: Movies){
+            if(i == movie_name){
+                break;
+            } 
+            j++;
+        }
+        if(j == Movies.size()){
+            cout << "no such movie present" << endl;
+            return;
+        }
+        Movies.erase(Movies.begin()+j);
+        // j=0;
+        // for(auto &i:all_shows){
+        //     if(i->get_MovieName() == movie_name){
+
+        //     }
+        // }
 
     }
-    void delete_movie(){
+    void delete_show(string theatre_name,Time start_time){
+        Theatre *theatre1;
+        int changed = 0;
 
-    }
-    void delete_show(){
+        // Find the theatre by name
+        int j=0;
+        for (auto i : Theatres) {
+            if (theatre_name == i->get_Name()) {
+                theatre1 = i;
+                changed = 1;
+                break;
+            }
+            j++;
+        }
+        if(changed == 0){
+            cout << "no such theatre" << endl;
+            return;
+        }
+        theatre1->delete_show(start_time);
 
     }
     
@@ -208,23 +329,23 @@ public:
 
 class Seat{
 private:
-    string row_number;
-    string seat_number;
+    int row_number;
+    int seat_number;
     bool isAvailable;
 public:
-    void Set_row_number(string n){
+    void Set_row_number(int n){
         this->row_number = n;
     }
-    void Set_seat_number(string n){
+    void Set_seat_number(int n){
         this->seat_number = n;
     }
     void Set_isAvailable(bool b){
         this->isAvailable = b;
     }
-    string get_row_number(){
+    int get_row_number(){
         return row_number;
     }
-    string get_seat_number(){
+    int get_seat_number(){
         return seat_number;
     }
     bool get_isAvailable(){
@@ -247,63 +368,66 @@ private:
 
 public:
     // Setter methods
-    void setMovieName(string name) {
+    void set_MovieName(string name) {
         this->movie_name = name;
     }
 
-    void setMovieStartTime(Time start_time) {
+    void set_MovieStartTime(Time start_time) {
         this->movie_start_time = start_time;
     }
 
-    void setMovieEndTime(Time end_time) {
+    void set_MovieEndTime(Time end_time) {
         this->movie_end_time = end_time;
     }
 
-    void setLanguage(string lang) {
+    void set_MovieDate(Date date){
+        this->movie_date = date;
+    }
+    void set_Language(string lang) {
         this->language = lang;
     }
 
-    void setCast(string cast_members) {
+    void set_Cast(string cast_members) {
         this->cast = cast_members;
     }
 
-    void setRating(string movie_rating) {
+    void set_Rating(string movie_rating) {
         this->rating = movie_rating;
     }
 
-    void setMovieOverview(string overview) {
+    void set_MovieOverview(string overview) {
         this->movie_overview = overview;
     }
 
     // Getter methods
-    string getMovieName() {
+    string get_MovieName() {
         return this->movie_name;
     }
 
-    Time getMovieStartTime() {
+    Time get_MovieStartTime() {
         return this->movie_start_time;
     }
 
-    Time getMovieEndTime() {
+    Time get_MovieEndTime() {
         return this->movie_end_time;
     }
 
-    string getLanguage() {
+    string get_Language() {
         return this->language;
     }
 
-    string getCast() {
+    string get_Cast() {
         return this->cast;
     }
 
-    string getRating() {
+    string get_Rating() {
         return this->rating;
     }
 
-    string getMovieOverview() {
+    string get_MovieOverview() {
         return this->movie_overview;
     }
-    Date getMovieDate(){
+    Date get_MovieDate(){
         return this->movie_date;
     }
 };
@@ -335,6 +459,7 @@ class Ticket{
 
 
 
+
 };
 
 
@@ -348,7 +473,7 @@ protected:
     int rows;
     int columns;
     vector<vector<Seat*>> seats_track;
-    vector<vector<Show*>> shows_track;
+    vector<Show*> shows_track;
 
 public:
     // Setter methods
@@ -380,12 +505,27 @@ public:
         this->columns = column_count;
     }
 
-    void set_SeatsTrack(vector<vector<Seat*>> seat_matrix) {
-        this->seats_track = seat_matrix;
+    void set_SeatsTrack(int rows,int columns) {
+        // this->seats_track = seat_matrix;
+        for(int i=0;i<columns;i++){
+            vector<Seat*> row_seats;
+            for(int j=0;j<rows;j++){
+                Seat *seat1 = new Seat;
+                seat1->Set_isAvailable(true);
+                seat1->Set_row_number(j+1);
+                seat1->Set_seat_number(i+1);
+                row_seats.push_back(seat1);
+            }
+            this->seats_track.push_back(row_seats);
+        }
     }
 
-    void set_ShowsTrack(vector<vector<Show*>> show_matrix) {
-        this->shows_track = show_matrix;
+    // void set_ShowsTrack(vector<vector<Show*> show_matrix) {
+    //     this->shows_track = show_matrix;
+    // }
+
+    void add_show(Show *show1){
+        this->shows_track.push_back(show1);
     }
 
     // Getter methods
@@ -421,16 +561,33 @@ public:
         return this->seats_track;
     }
 
-    vector<vector<Show*>> get_ShowsTrack() {
+    vector<Show*> get_ShowsTrack() {
         return this->shows_track;
+    }
+
+    void delete_show(Time stime){
+        int j=0;
+        Show *show1;
+        for(auto i:shows_track){
+            if ((i->get_MovieStartTime()).compare(stime) == 0){
+               show1 = i;
+               break; 
+            }
+            j++;
+        }
+        if(j==shows_track.size()){
+            cout << "no such show in the given theatre" << endl;
+            return;
+        }
+        shows_track.erase(shows_track.begin()+j);
+        delete show1;
+        cout << "deleted the show sucessfully" << endl;
     }
 };
 
 class Booking_Manager{
 protected:
-    vector<Theatre*> Theatres;
-    vector<Customer*> Customers;
-    vector<Show> Movies;
+    
 public:
     void add_Theatre(Theatre *theatre){
         // Theatre* theatre=new Theatre();
@@ -486,7 +643,7 @@ public:
             cout<<"Select a movie(enter the serial number of the movie you want to book)"<<endl;
             int i=1;
             for(auto& movie:Movies){
-                cout<<i<<". "<<movie.getMovieName()<<endl;
+                cout<<i<<". "<<movie.get_MovieName()<<endl;
             }
             int index;
             cin>>index;
