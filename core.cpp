@@ -670,7 +670,7 @@ public:
         }
         Customer* customer=new Customer(name,age,email,phoneNumber,password);
         Customers.push_back(customer);
-        handleBooking();
+        handleBooking(customer);
     }
     void handleExistingCustomer(){
         string email;
