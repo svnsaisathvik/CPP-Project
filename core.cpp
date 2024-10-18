@@ -662,6 +662,10 @@ public:
             for(auto &theatre:Theatres){
                 for(auto &shows:theatre->get_ShowsTrack()){
                     if(shows->get_MovieName()==movieName && shows->get_MovieDate().get_date()==date){
+                        cout<<theatre->get_Name()<<" "<<theatre->get_Location()<<" "<<theatre->get_City()<<" "<<theatre->get_Capacity()<<endl;
+                        cout<< shows->get_MovieName() << " " 
+                                << shows->get_MovieStartTime().get_hour() << " "<<shows->get_MovieStartTime().get_minute()<<" " 
+                                << shows->get_MovieEndTime().get_hour() <<" "<<shows->get_MovieEndTime().get_minute()<< endl;
                         
                     }
                 }
