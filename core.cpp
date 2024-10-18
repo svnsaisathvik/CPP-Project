@@ -3,9 +3,7 @@ using namespace std;
 
 
 
-vector<Theatre*> Theatres;
-vector<Customer*> Customers;
-vector<string> Movies;
+
 // vector<Show*> all_shows;
 
 class Date {
@@ -584,6 +582,9 @@ public:
         cout << "deleted the show sucessfully" << endl;
     }
 };
+vector<Theatre*> Theatres;
+vector<Customer*> Customers;
+vector<string> Movies;
 
 class Booking_Manager{
 protected:
@@ -643,25 +644,25 @@ public:
             cout<<"Select a movie(enter the serial number of the movie you want to book)"<<endl;
             int i=1;
             for(auto& movie:Movies){
-                cout<<i<<". "<<movie.get_MovieName()<<endl;
+                cout<<i<<". "<<movie<<endl;
             }
             int index;
             cin>>index;
-            string movieName=Movies[index-1].getMovieName();
+            string movieName=Movies[index-1];
             cout<<"Select a date for the movie"<<endl;
+            set<pair<int,int>> dates;
             for(auto &theatre:Theatres){
                 for(auto &shows:theatre->get_ShowsTrack()){
-                    for(auto &show:shows){
-                        cout<<show->getMovieDate().get_date()<<endl;
-                    }
+                    dates.insert(make_pair(shows->get_MovieDate().get_date(),shows->get_MovieDate().get_month()));
                 }
             }
             int date;
+            cout<<"Type the date you are looking for:";
             cin>>date;
             for(auto &theatre:Theatres){
                 for(auto &shows:theatre->get_ShowsTrack()){
-                    for(auto &show:shows){
-                        cout<<show->getMovieDate().get_date()<<endl;
+                    if(shows->get_MovieName()==movieName && shows->get_MovieDate().get_date()==date){
+                        
                     }
                 }
             }
