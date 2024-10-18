@@ -152,7 +152,9 @@ public:
     string get_email(){
         return this->email;
     }
+    Person(){
 
+    }
     Person(string n,int a,string e){
         this->Set_name(n);
         this->Set_age(a);
@@ -165,23 +167,59 @@ class Customer: public Person{
 protected:
     string phoneNumber;
     vector<Ticket> CustomerBookings;
-
+    string password;
 public:
-    Customer(string name,int age,string email,string phoneNumber):Person(name,age,email){
+    Customer(){
+
+    }
+    Customer(string name,int age,string email,string phoneNumber,string pass):Person(name,age,email){
         this->phoneNumber=phoneNumber;
+        this->password == pass;
     }
-    void Add_customer(){
+    // void Add_customer(string name,int age,string email,string phnumber,string password){
+    //     for(auto i:Customers){
+    //         if(i->get_email() == email){
+    //             cout << "another customer with same email already exists" << endl;
+    //             return; 
+    //         }
+    //     }
+    //     Customer customer1(name,age,email,phnumber,password);
+    //     Customers.push_back(&customer1);
+    //     cout << "customer had sucessfully registered" << endl;
+    //     return;
 
-    }
-    void login(){
 
-    }
+    // }
+    // void login(string email,string password){
+    //     Customer *customer1 = new Customer;
+    //     int changed = 0;
+    //     for(auto i: Customers){
+    //         if(i->get_email() == email){
+    //             customer1 = i;
+    //             changed = 1;
+    //         }
+    //     }
+        
+    //     if(changed == 0){
+    //         cout << "no such person with the given email exist no please signup" << endl;
+    //         return;
+    //     }
+    // }
+
     void bookShow(Ticket ticket){
         this->CustomerBookings.push_back(ticket);
 
     }
     string get_PhoneNumber(){
         return this->phoneNumber;
+    }
+    bool match_password(string pass){
+        if(this->password == pass){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     void cancelBooking(Show show){
         for(auto it=this->CustomerBookings.begin();it!=this->CustomerBookings.end();
@@ -610,32 +648,60 @@ public:
         string phoneNumber;
         cout<<"Enter phone number:";
         cin>>phoneNumber;
-        Customer* customer=new Customer(name,age,email,phoneNumber);
+        string password;
+        while(1){
+            cout << "Enter the password" << endl;
+            string pass;
+            cin >> pass;
+            cout << "confirm the password" << endl;
+            string pass1;
+            cin >> pass1;
+            if(pass == pass1){
+                password = pass1;
+                break;
+            }
+            cout<< "confirmation password is not matched please try again" << endl;
+        }
+        for(auto i:Customers){
+            if(i->get_email() == email){
+                cout << "other customer already exists if the same email" << endl;
+                return;
+            }
+        }
+        Customer* customer=new Customer(name,age,email,phoneNumber,password);
         Customers.push_back(customer);
         handleBooking();
     }
     void handleExistingCustomer(){
-        string name,phoneNumber;
+        string email;
         bool found=false;
-        cout<<"Enter Username:";
-        cin>>name;
-        cout<<"Enter PhoneNumber:";
-        cin>>phoneNumber;
+        Customer *cust1 = new Customer;
+        cout << "enter email id: ";
+        cin >> email; 
         for(auto &it:Customers){
-            if(it->get_name()==name and it->get_PhoneNumber()==phoneNumber){
+            if(it->get_email()==email){
                 found=true;
+                cust1 = it;
             }
         }
         if(!found){
             cout<<"No User Exists with the current details"<<endl;
             return;
         }
-        else{
-            handleBooking();
+        string pass;
+        while(1){
+            cout << "Enter password: " << endl;
+            cin >> pass;
+            if(!(cust1->match_password(pass))){
+                cout << "invalid password try again" << endl;//what to do here if the user wants to change the email he has entered??
+            }
+            else{
+                break;
+            }
         }
-
+        handleBooking(cust1);
     }
-    void handleBooking(){
+    void handleBooking(Customer *customer){
         cout<<"Press 1 to book a movie"<<endl;
         cout<<"Press 2 to check your previous bookings"<<endl;
         int command;
