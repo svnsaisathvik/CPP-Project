@@ -292,6 +292,17 @@ public:
         show1->set_MovieOverview(overview);
 
         theatre1->add_show(show1);  // Add the show to the theatre
+        changed = 0;
+        for(auto i:Movies){
+            if(i == m_name){
+                changed = 1;
+                break;
+            }
+        }
+        if(changed == 0){
+            Movies.push_back(m_name);
+        }
+
         cout << "Show added successfully!" << endl;
     }
 
@@ -741,3 +752,146 @@ public:
     
 };
 
+int main(){
+    while(1){
+        cout << "enter 1 to login as a customer" << endl;
+        cout << "enter 2 to login as an admin" << endl;
+        cout << "enter 3 to signup" << endl;
+        int command;
+        cin >> command;
+        if(command == 1){
+            Booking_Manager b;
+            b.handleExistingCustomer();
+        }
+        else if(command == 2){
+            string key;
+            cout << "enter the secret key: ";
+            cin >> key;
+            if(key != "123456"){
+                continue;
+            }
+            cout << "want to add theatre PRESS 1" << endl;
+            cout << "want to add show PRESS 2" << endl;
+            cout << "want to delete theatre PRESS 3" << endl;
+            cout << "want to delete movie PRESS 4" << endl;
+            cout << "want to delete show PRESS 5" << endl;
+            int type;
+            cin >> type;
+            if(type == 1){
+                string name, location, city, o_name;
+                int capacity, rows, columns;
+                
+                cout << "Please enter the theatre name: ";
+                cin >> name;
+
+                cout << "Please enter the location: ";
+                cin >> location;
+
+                cout << "Please enter the city: ";
+                cin >> city;
+
+                cout << "Please enter the capacity: ";
+                cin >> capacity;
+
+                cout << "Please enter the owner's name: ";
+                cin >> o_name;
+
+                cout << "Please enter the number of rows in the theatre: ";
+                cin >> rows;
+
+                cout << "Please enter the number of columns in the theatre: ";
+                cin >> columns;
+                Admin a;
+
+                a.add_theatre(name,location,city,capacity,o_name,rows,columns);
+                delete &a;
+
+            }
+            else if(type == 2){
+                string theatre_name, m_name, lang, cast, rating, overview;
+                int start_timehour, start_timeminute, end_timehour, end_timeminute;
+                int dateday, datemonth, dateyear;
+                
+                Date date;
+                Time start_time, end_time;
+
+                cout << "Please enter the theatre name: ";
+                cin >> theatre_name;
+
+                cout << "Please enter the movie name: ";
+                cin >> m_name;
+
+                cout << "Please enter the start time (hour and minute): ";
+                cin >> start_timehour >> start_timeminute;
+
+                // Set start_time using the setter methods
+                start_time.Set_hour(start_timehour);
+                start_time.Set_minute(start_timeminute);
+
+                cout << "Please enter the end time (hour and minute): ";
+                cin >> end_timehour >> end_timeminute;
+
+                // Set end_time using the setter methods
+                end_time.Set_hour(end_timehour);
+                end_time.Set_minute(end_timeminute);
+
+                cout << "Please enter the date (day, month, year): ";
+                cin >> dateday >> datemonth >> dateyear;
+
+                // Set date using the setter methods
+                date.Set_date(dateday);
+                date.Set_month(datemonth);
+                date.Set_year(dateyear);
+
+                cout << "Please enter the language: ";
+                cin >> lang;
+
+                cout << "Please enter the cast: ";
+                cin >> cast;
+
+                cout << "Please enter the rating: ";
+                cin >> rating;
+
+                cout << "Please enter the overview: ";
+                cin >> overview;
+                Admin a;
+                a.add_show(theatre_name,m_name,start_time,end_time,date,lang,cast,rating,overview);
+                delete &a;
+            }
+            else if(type == 3){
+                string theatre_name;
+                cout << "please enter the theatre name: ";
+                cin >> theatre_name;
+                Admin a;
+                a.delete_theatre(theatre_name);
+                delete &a;
+            }
+            else if(type == 4){
+                string movie_name;
+                cout << "please enter movie name: ";
+                cin >> movie_name;
+                Admin a;
+                a.delete_movie(movie_name);
+                delete &a;
+            }
+            else if(type == 5){
+                string theatre_name;
+                int start_timehour;
+                int start_timeminute;
+                Time start_time;
+                cout << "Please enter the theatre name: ";
+                cin >> theatre_name;
+                cout << "Please enter the start time (hour and minute): ";
+                cin >> start_timehour >> start_timeminute;
+                start_time.Set_hour(start_timehour);
+                start_time.Set_minute(start_timeminute);
+                Admin a;
+                a.delete_show(theatre_name,start_time);
+            }
+        }
+        else if(command == 3){
+            Booking_Manager b;
+            b.add_NewCustomer();
+        }
+    }
+}
