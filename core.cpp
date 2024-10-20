@@ -714,20 +714,26 @@ public:
             set<pair<int,int>> dates;
             for(auto &theatre:Theatres){
                 for(auto &shows:theatre->get_ShowsTrack()){
+                if(shows->get_MovieName()==movieName){
                     dates.insert(make_pair(shows->get_MovieDate().get_date(),shows->get_MovieDate().get_month()));
+                    }
                 }
+            }
+            cout<<"Available Dates"<<endl;
+            for(auto it=dates.begin();it!=dates.end();++it){
+                cout<<it->first<<" "<<it->second<<endl;
             }
             int showIndex;
             while(1){
-            cout<<"Type the date you are looking for:";
-            int date;
-            cin>>date;
+            cout<<"Type the date and month you are looking for:"<<endl;
+            int date,month;
+            cin>>date>>month;
             int i=1;
             for(auto &theatre:Theatres){
                 showIndex=0;
                 for(auto &shows:theatre->get_ShowsTrack()){
                     showIndex++;
-                    if(shows->get_MovieName()==movieName && shows->get_MovieDate().get_date()==date){
+                    if(shows->get_MovieName()==movieName && shows->get_MovieDate().get_date()==date && shows->get_MovieDate().get_month()==month){
                         cout<<i++<<". "<<theatre->get_Name()<<" "<<theatre->get_Location()<<" "<<theatre->get_City()<<" "<<theatre->get_Capacity()<<endl;
                         cout<< shows->get_MovieName() << " " 
                                 << shows->get_MovieStartTime().get_hour() << " "<<shows->get_MovieStartTime().get_minute()<<" " 
@@ -752,9 +758,21 @@ public:
         int sno;
         cin>>sno;
         Theatre* theatre=Theatres[sno-1];
+        int i=1;
+        cout<<"S ";
+        for(int j=1;j<theatre->get_Columns();j++){
+            cout<<j<<" ";
+        }
+        cout<<endl;
         for(auto &row:theatre->show_SeatsTrack()){
+            cout<<i++<<" ";
             for(auto& elem:row){
-                cout<<elem<<" ";
+            if(elem->get_isAvailable()){
+                cout<<"A"<<" ";
+            }
+            else{
+                cout<<"NA"<<" ";
+            }
             }
             cout<<endl;
         }
@@ -776,9 +794,28 @@ public:
         for(auto &Customer:Customers){
             int i=1;
             if(Customer->get_name()==customer->get_name() and Customer->get_email()==customer->get_email() and Customer->get_PhoneNumber()==customer->get_PhoneNumber()){
-                for(auto &ticket:Customer->get_CustomerBookings()){
-                    cout<<i++<<" "<<ticket.get_Show().get_MovieName();// print out the necessary details 
+                for(auto &ticket: Customer->get_CustomerBookings()) {
+                    cout << "Booking #" << i++ << endl;
+                    cout << "Movie Name: " << ticket.get_Show().get_MovieName() << endl;
+                    cout << "Date: " 
+                        << ticket.get_Show().get_MovieDate().get_date() << "-" 
+                        << ticket.get_Show().get_MovieDate().get_month() << "-" 
+                        << ticket.get_Show().get_MovieDate().get_year() << endl;
+                    cout << "Start Time: " 
+                        << ticket.get_Show().get_MovieStartTime().get_hour() << ":" 
+                        << ticket.get_Show().get_MovieStartTime().get_minute() << endl;
+                    cout << "End Time: " 
+                        << ticket.get_Show().get_MovieEndTime().get_hour() << ":" 
+                        << ticket.get_Show().get_MovieEndTime().get_minute() << endl;
+                    cout << "Language: " << ticket.get_Show().get_Language() << endl;
+                    cout << "Theatre Name: " << ticket.get_Theatre().get_Name() << endl;
+                    cout << "Location: " << ticket.get_Theatre().get_Location() << ", " 
+                        << ticket.get_Theatre().get_City() << endl;
+                    cout << "Seat: Row " << ticket.get_Seat().get_row_number() 
+                        << ", Seat " << ticket.get_Seat().get_seat_number() << endl;
+                    cout << "-----------------------------------------" << endl;
                 }
+
             }
         }
     }
