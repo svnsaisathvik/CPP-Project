@@ -213,7 +213,7 @@ public:
     string get_PhoneNumber(){
         return this->phoneNumber;
     }
-    vector<Ticket> get_Shows(){
+    vector<Ticket> get_CustomerBookings(){
         return this->CustomerBookings;
     }
     bool match_password(string pass){
@@ -252,7 +252,7 @@ public:
         theatre1->set_Rows(rows);
         theatre1->set_Columns(columns);
         Booking_Manager b;
-        b.add_Theatre(theatre1);
+        Theatres.push_back(theatre1);
     }   
     void add_show(string theatre_name, string m_name, Time start_time, Time end_time, Date date, string lang, string cast, string rating, string overview) {
         Theatre *theatre1;
@@ -573,7 +573,7 @@ public:
         return this->shows_track;
     }
 
-    void delete_show(Time stime){
+    void delete_show(Time stime){//this should be there already checked
         int j=0;
         Show *show1;
         for(auto i:shows_track){
@@ -629,13 +629,7 @@ class Booking_Manager{
 protected:
     
 public:
-    void add_Theatre(Theatre *theatre){
-        // Theatre* theatre=new Theatre();
-        Theatres.push_back(theatre);
-    }
-    void add_movie(){
-
-    }
+    
     void add_NewCustomer(){
         string name;
         cout<<"Username:";
@@ -711,7 +705,7 @@ public:
             cout<<"Select a movie(enter the serial number of the movie you want to book)"<<endl;
             int i=1;
             for(auto& movie:Movies){
-                cout<<i<<". "<<movie<<endl;
+                cout<<i++<<". "<<movie<<endl;
             }
             int index;
             cin>>index;
@@ -782,7 +776,7 @@ public:
         for(auto &Customer:Customers){
             int i=1;
             if(Customer->get_name()==customer->get_name() and Customer->get_email()==customer->get_email() and Customer->get_PhoneNumber()==customer->get_PhoneNumber()){
-                for(auto &ticket:Customer->get_Shows()){
+                for(auto &ticket:Customer->get_CustomerBookings()){
                     cout<<i++<<" "<<ticket.get_Show().get_MovieName();// print out the necessary details 
                 }
             }
