@@ -222,7 +222,7 @@ public:
         theatre1->set_OwnerName(o_name);
         theatre1->set_Rows(rows);
         theatre1->set_Columns(columns);
-        Booking_Manager b;
+        Booking_Manager b; //why?
         Theatres.push_back(theatre1);
     }   
     void add_show(string theatre_name, string m_name, Time start_time, Time end_time, Date date, string lang, string cast, string rating, string overview) {
@@ -245,8 +245,8 @@ public:
 
         // Check for time conflicts with existing shows
         for (auto existing_show : theatre1->get_ShowsTrack()) {
-            if (date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same
-                if (compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
+            if (!date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same  //added a not because it returns 0;
+                if (!compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
                     cout << "Time conflict with another show!" << endl;
                     return;
                 }
@@ -324,6 +324,7 @@ public:
                 }
             }
         }
+        // here delete movie means he should also delete all the shows which are in different theatres.
         Movies.erase(Movies.begin()+j);
 
     }
@@ -715,7 +716,7 @@ public:
             }
             int showIndex;
             while(1){
-            cout<<"Type the date and month you are looking for:"<<endl;
+            cout<<"Type the date and month you are looking for(from above list):"<<endl;
             int date,month;
             cin>>date>>month;
             int i=1;
