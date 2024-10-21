@@ -287,6 +287,14 @@ public:
             cout << "No such theatre exists" << endl;
             return;
         }  
+        //deleting all the tickets that are having shows in this theatre
+        for(auto i:Customers){
+            for(auto j:i->get_CustomerBookings()){
+                if(j.get_Theatre().get_Name() == theatre1->get_Name()){
+                    i->cancelBooking(j.get_Show());
+                }
+            }
+        }
         Theatres.erase(Theatres.begin()+j);
         delete theatre1;
     }
@@ -301,6 +309,14 @@ public:
         if(j == Movies.size()){
             cout << "no such movie present" << endl;
             return;
+        }
+        //deleting all the tickets that are having their movie as the movie we are deleting
+        for(auto i:Customers){
+            for(auto j:i->get_CustomerBookings()){
+                if(j.get_Show().get_MovieName() == movie_name){
+                    i->cancelBooking(j.get_Show());
+                }
+            }
         }
         Movies.erase(Movies.begin()+j);
 
@@ -323,8 +339,15 @@ public:
             cout << "no such theatre" << endl;
             return;
         }
+        //delting all the tickets that are corresponding to this show in the customers ticket booking list
+        for(auto i:Customers){
+            for(auto j:i->get_CustomerBookings()){
+                if((j.get_Theatre().get_Name() == theatre1->get_Name()) && (j.get_Show().get_MovieStartTime().compare(start_time) == 0)){
+                    i->cancelBooking(j.get_Show());
+                }
+            }
+        }
         theatre1->delete_show(start_time);
-
     }
     
 };
