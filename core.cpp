@@ -176,35 +176,6 @@ public:
         this->phoneNumber=phoneNumber;
         this->password == pass;
     }
-    // void Add_customer(string name,int age,string email,string phnumber,string password){
-    //     for(auto i:Customers){
-    //         if(i->get_email() == email){
-    //             cout << "another customer with same email already exists" << endl;
-    //             return; 
-    //         }
-    //     }
-    //     Customer customer1(name,age,email,phnumber,password);
-    //     Customers.push_back(&customer1);
-    //     cout << "customer had sucessfully registered" << endl;
-    //     return;
-
-
-    // }
-    // void login(string email,string password){
-    //     Customer *customer1 = new Customer;
-    //     int changed = 0;
-    //     for(auto i: Customers){
-    //         if(i->get_email() == email){
-    //             customer1 = i;
-    //             changed = 1;
-    //         }
-    //     }
-        
-    //     if(changed == 0){
-    //         cout << "no such person with the given email exist no please signup" << endl;
-    //         return;
-    //     }
-    // }
 
     void bookShow(Ticket ticket){
         this->CustomerBookings.push_back(ticket);
