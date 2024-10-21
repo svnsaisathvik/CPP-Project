@@ -245,7 +245,6 @@ public:
 
         // Check for time conflicts with existing shows
         for (auto existing_show : theatre1->get_ShowsTrack()) {
-            // Assuming compareTime is your function that checks for time overlap
             if (date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same
                 if (compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
                     cout << "Time conflict with another show!" << endl;
@@ -499,9 +498,6 @@ public:
         }
     }
 
-    // void set_ShowsTrack(vector<vector<Show*> show_matrix) {
-    //     this->shows_track = show_matrix;
-    // }
 
     void add_show(Show *show1){
         this->shows_track.push_back(show1);
