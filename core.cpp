@@ -264,6 +264,12 @@ public:
         show1->set_Rating(rating);
         show1->set_MovieOverview(overview);
 
+        //adding the movie name if the show had a new movie which is not added to our movies list till now
+        auto it = find(Movies.begin(),Movies.end(),m_name);
+        if(it == Movies.end()){
+            Movies.push_back(m_name);
+        }
+
         theatre1->add_show(show1);  // Add the show to the theatre
         cout << "Show added successfully!" << endl;
     }
