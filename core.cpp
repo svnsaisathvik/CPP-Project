@@ -303,12 +303,6 @@ public:
             return;
         }
         Movies.erase(Movies.begin()+j);
-        // j=0;
-        // for(auto &i:all_shows){
-        //     if(i->get_MovieName() == movie_name){
-
-        //     }
-        // }
 
     }
     void delete_show(string theatre_name,Time start_time){
