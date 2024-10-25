@@ -246,7 +246,7 @@ public:
         // Check for time conflicts with existing shows
         for (auto existing_show : theatre1->get_ShowsTrack()) {
             if (!date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same  //added a not because it returns 0;
-                if (!compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
+                if (compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
                     cout << "Time conflict with another show!" << endl;
                     return;
                 }
@@ -815,6 +815,7 @@ public:
 };
 
 int main(){
+    cout<<"Welcome to BookYourShow.We know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
     while(1){
         cout << "enter 1 to login as a customer" << endl;
         cout << "enter 2 to login as an admin" << endl;
