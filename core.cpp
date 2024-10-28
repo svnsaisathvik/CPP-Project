@@ -1,9 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-
-
-
 // vector<Show*> all_shows;
 
 class Date {
@@ -569,8 +565,8 @@ public:
         Show *show1;
         for(auto i:shows_track){
             if ((i->get_MovieStartTime()).compare(stime) == 0){
-               show1 = i;
-               break; 
+            show1 = i;
+            break; 
             }
             j++;
         }
