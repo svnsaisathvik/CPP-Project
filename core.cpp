@@ -1,7 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 // vector<Show*> all_shows;
-
+class Ticket;
+class Show;
+class Seat;
+class Person;
+class Customer;
+class Admin;
+class Theatre;
 class Date {
 private:
     int date;
@@ -122,238 +128,6 @@ bool compareTime(Time existingStart, Time existingEnd, Time newStart, Time newEn
     return true;
 }
 
-
-class Person{
-protected:
-    string name;
-    int age;
-    string email;
-public:
-
-    void Set_name(string n){
-        this->name = name;
-    }
-    void Set_age(int a){
-        this->age = a;
-    }
-    void Set_email(string e){
-        this->email = e;
-    }
-    string get_name(){
-        return this->name;
-    }
-    int get_age(){
-        return this->age;
-    }
-    string get_email(){
-        return this->email;
-    }
-    Person(){
-
-    }
-    Person(string n,int a,string e){
-        this->Set_name(n);
-        this->Set_age(a);
-        this->Set_email(e);
-    }
-
-};
-
-class Customer: public Person{
-protected:
-    string phoneNumber;
-    vector<Ticket> CustomerBookings;
-    string password;
-public:
-    Customer(){
-
-    }
-    Customer(string name,int age,string email,string phoneNumber,string pass):Person(name,age,email){
-        this->phoneNumber=phoneNumber;
-        this->password == pass;
-    }
-
-    void bookShow(Ticket ticket){
-        this->CustomerBookings.push_back(ticket);
-
-    }
-    string get_PhoneNumber(){
-        return this->phoneNumber;
-    }
-    vector<Ticket> get_CustomerBookings(){
-        return this->CustomerBookings;
-    }
-    bool match_password(string pass){
-        if(this->password == pass){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-    void cancelBooking(Show show){
-        for(auto it=this->CustomerBookings.begin();it!=this->CustomerBookings.end();
-        ){
-            if(it->get_Show().get_MovieName()==show.get_MovieName()){
-                it=this->CustomerBookings.erase(it);
-            }
-            else{
-                ++it;
-            }
-        }
-    }
-    
-};
-
-class Admin: public Person{
-protected:
-
-public:
-    void add_theatre(string name,string location,string city,int capacity,string o_name,int rows,int columns){
-        Theatre *theatre1 = new Theatre();
-        theatre1->set_Name(name);
-        theatre1->set_Location(location);
-        theatre1->set_City(city);
-        theatre1->set_Capacity(capacity);
-        theatre1->set_OwnerName(o_name);
-        theatre1->set_Rows(rows);
-        theatre1->set_Columns(columns);
-        Booking_Manager b; //why?
-        Theatres.push_back(theatre1);
-    }   
-    void add_show(string theatre_name, string m_name, Time start_time, Time end_time, Date date, string lang, string cast, string rating, string overview) {
-        Theatre *theatre1;
-        int changed = 0;
-
-        // Find the theatre by name
-        for (auto i : Theatres) {
-            if (theatre_name == i->get_Name()) {
-                theatre1 = i;
-                changed = 1;
-                break;
-            }
-        }
-
-        if (changed == 0) {
-            cout << "No such theatre exists" << endl;
-            return;
-        }
-
-        // Check for time conflicts with existing shows
-        for (auto existing_show : theatre1->get_ShowsTrack()) {
-            if (!date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same  //added a not because it returns 0;
-                if (compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
-                    cout << "Time conflict with another show!" << endl;
-                    return;
-                }
-            }
-        }
-
-        // If no conflict, proceed to add the show
-        Show *show1 = new Show;
-        show1->set_MovieName(m_name);
-        show1->set_MovieStartTime(start_time);
-        show1->set_MovieEndTime(end_time);
-        show1->set_MovieDate(date);
-        show1->set_Language(lang);
-        show1->set_Cast(cast);
-        show1->set_Rating(rating);
-        show1->set_MovieOverview(overview);
-
-        //adding the movie name if the show had a new movie which is not added to our movies list till now
-        auto it = find(Movies.begin(),Movies.end(),m_name);
-        if(it == Movies.end()){
-            Movies.push_back(m_name);
-        }
-
-        theatre1->add_show(show1);  // Add the show to the theatre
-        cout << "Show added successfully!" << endl;
-    }
-
-
-    void delete_theatre(string theatre_name){
-        Theatre *theatre1;
-        int changed = 0;
-
-        // Find the theatre by name
-        int j=0;
-        for (auto i : Theatres) {
-            if (theatre_name == i->get_Name()) {
-                theatre1 = i;
-                changed = 1;
-                break;
-            }
-            j++;
-        }
-        if (changed == 0) {
-            cout << "No such theatre exists" << endl;
-            return;
-        }  
-        //deleting all the tickets that are having shows in this theatre
-        for(auto i:Customers){
-            for(auto j:i->get_CustomerBookings()){
-                if(j.get_Theatre().get_Name() == theatre1->get_Name()){
-                    i->cancelBooking(j.get_Show());
-                }
-            }
-        }
-        Theatres.erase(Theatres.begin()+j);
-        delete theatre1;
-    }
-    void delete_movie(string movie_name){
-        int j=0;
-        for(auto i: Movies){
-            if(i == movie_name){
-                break;
-            } 
-            j++;
-        }
-        if(j == Movies.size()){
-            cout << "no such movie present" << endl;
-            return;
-        }
-        //deleting all the tickets that are having their movie as the movie we are deleting
-        for(auto i:Customers){
-            for(auto j:i->get_CustomerBookings()){
-                if(j.get_Show().get_MovieName() == movie_name){
-                    i->cancelBooking(j.get_Show());
-                }
-            }
-        }
-        // here delete movie means he should also delete all the shows which are in different theatres.
-        Movies.erase(Movies.begin()+j);
-
-    }
-    void delete_show(string theatre_name,Time start_time){
-        Theatre *theatre1;
-        int changed = 0;
-
-        // Find the theatre by name
-        int j=0;
-        for (auto i : Theatres) {
-            if (theatre_name == i->get_Name()) {
-                theatre1 = i;
-                changed = 1;
-                break;
-            }
-            j++;
-        }
-        if(changed == 0){
-            cout << "no such theatre" << endl;
-            return;
-        }
-        //delting all the tickets that are corresponding to this show in the customers ticket booking list
-        for(auto i:Customers){
-            for(auto j:i->get_CustomerBookings()){
-                if((j.get_Theatre().get_Name() == theatre1->get_Name()) && (j.get_Show().get_MovieStartTime().compare(start_time) == 0)){
-                    i->cancelBooking(j.get_Show());
-                }
-            }
-        }
-        theatre1->delete_show(start_time);
-    }
-    
-};
 
 
 class Seat{
@@ -608,9 +382,246 @@ class Ticket{
 
 
 };
+
 vector<Theatre*> Theatres;
 vector<Customer*> Customers;
 vector<string> Movies;
+
+class Person{
+protected:
+    string name;
+    int age;
+    string email;
+public:
+
+    void Set_name(string n){
+        this->name = name;
+    }
+    void Set_age(int a){
+        this->age = a;
+    }
+    void Set_email(string e){
+        this->email = e;
+    }
+    string get_name(){
+        return this->name;
+    }
+    int get_age(){
+        return this->age;
+    }
+    string get_email(){
+        return this->email;
+    }
+    Person(){
+
+    }
+    Person(string n,int a,string e){
+        this->Set_name(n);
+        this->Set_age(a);
+        this->Set_email(e);
+    }
+
+};
+
+class Customer: public Person{
+protected:
+    string phoneNumber;
+    vector<Ticket> CustomerBookings;
+    string password;
+public:
+    Customer(){
+
+    }
+    Customer(string name,int age,string email,string phoneNumber,string pass):Person(name,age,email){
+        this->phoneNumber=phoneNumber;
+        this->password = pass;
+    }
+
+    void bookShow(Ticket ticket){
+        this->CustomerBookings.push_back(ticket);
+
+    }
+    string get_PhoneNumber(){
+        return this->phoneNumber;
+    }
+    vector<Ticket> get_CustomerBookings(){
+        return this->CustomerBookings;
+    }
+    bool match_password(string pass){
+        if(this->password == pass){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    void cancelBooking(Show show){
+        for(auto it=this->CustomerBookings.begin();it!=this->CustomerBookings.end();
+        ){
+            if(it->get_Show().get_MovieName()==show.get_MovieName()){
+                it=this->CustomerBookings.erase(it);
+            }
+            else{
+                ++it;
+            }
+        }
+    }
+    
+};
+
+class Admin: public Person{
+protected:
+
+public:
+    void add_theatre(string name,string location,string city,int capacity,string o_name,int rows,int columns){
+        Theatre *theatre1 = new Theatre();
+        theatre1->set_Name(name);
+        theatre1->set_Location(location);
+        theatre1->set_City(city);
+        theatre1->set_Capacity(capacity);
+        theatre1->set_OwnerName(o_name);
+        theatre1->set_Rows(rows);
+        theatre1->set_Columns(columns);
+        // Booking_Manager b; //why?
+        Theatres.push_back(theatre1);
+    }   
+    void add_show(string theatre_name, string m_name, Time start_time, Time end_time, Date date, string lang, string cast, string rating, string overview) {
+        Theatre *theatre1;
+        int changed = 0;
+
+        // Find the theatre by name
+        for (auto i : Theatres) {
+            if (theatre_name == i->get_Name()) {
+                theatre1 = i;
+                changed = 1;
+                break;
+            }
+        }
+
+        if (changed == 0) {
+            cout << "No such theatre exists" << endl;
+            return;
+        }
+
+        // Check for time conflicts with existing shows
+        for (auto existing_show : theatre1->get_ShowsTrack()) {
+            if (!date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same  //added a not because it returns 0;
+                if (compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
+                    cout << "Time conflict with another show!" << endl;
+                    return;
+                }
+            }
+        }
+
+        // If no conflict, proceed to add the show
+        Show *show1 = new Show;
+        show1->set_MovieName(m_name);
+        show1->set_MovieStartTime(start_time);
+        show1->set_MovieEndTime(end_time);
+        show1->set_MovieDate(date);
+        show1->set_Language(lang);
+        show1->set_Cast(cast);
+        show1->set_Rating(rating);
+        show1->set_MovieOverview(overview);
+
+        //adding the movie name if the show had a new movie which is not added to our movies list till now
+        auto it = find(Movies.begin(),Movies.end(),m_name);
+        if(it == Movies.end()){
+            Movies.push_back(m_name);
+        }
+
+        theatre1->add_show(show1);  // Add the show to the theatre
+        cout << "Show added successfully!" << endl;
+    }
+
+
+    void delete_theatre(string theatre_name){
+        Theatre *theatre1;
+        int changed = 0;
+
+        // Find the theatre by name
+        int j=0;
+        for (auto i : Theatres) {
+            if (theatre_name == i->get_Name()) {
+                theatre1 = i;
+                changed = 1;
+                break;
+            }
+            j++;
+        }
+        if (changed == 0) {
+            cout << "No such theatre exists" << endl;
+            return;
+        }  
+        //deleting all the tickets that are having shows in this theatre
+        for(auto i:Customers){
+            for(auto j:i->get_CustomerBookings()){
+                if(j.get_Theatre().get_Name() == theatre1->get_Name()){
+                    i->cancelBooking(j.get_Show());
+                }
+            }
+        }
+        Theatres.erase(Theatres.begin()+j);
+        delete theatre1;
+    }
+    void delete_movie(string movie_name){
+        int j=0;
+        for(auto i: Movies){
+            if(i == movie_name){
+                break;
+            } 
+            j++;
+        }
+        if(j == Movies.size()){
+            cout << "no such movie present" << endl;
+            return;
+        }
+        //deleting all the tickets that are having their movie as the movie we are deleting
+        for(auto i:Customers){
+            for(auto j:i->get_CustomerBookings()){
+                if(j.get_Show().get_MovieName() == movie_name){
+                    i->cancelBooking(j.get_Show());
+                }
+            }
+        }
+        // here delete movie means he should also delete all the shows which are in different theatres.
+        Movies.erase(Movies.begin()+j);
+
+    }
+    void delete_show(string theatre_name,Time start_time){
+        Theatre *theatre1;
+        int changed = 0;
+
+        // Find the theatre by name
+        int j=0;
+        for (auto i : Theatres) {
+            if (theatre_name == i->get_Name()) {
+                theatre1 = i;
+                changed = 1;
+                break;
+            }
+            j++;
+        }
+        if(changed == 0){
+            cout << "no such theatre" << endl;
+            return;
+        }
+        //delting all the tickets that are corresponding to this show in the customers ticket booking list
+        for(auto i:Customers){
+            for(auto j:i->get_CustomerBookings()){
+                if((j.get_Theatre().get_Name() == theatre1->get_Name()) && (j.get_Show().get_MovieStartTime().compare(start_time) == 0)){
+                    i->cancelBooking(j.get_Show());
+                }
+            }
+        }
+        theatre1->delete_show(start_time);
+    }
+    
+};
+
+
+
+
 
 class Booking_Manager{
 protected:
@@ -745,7 +756,7 @@ public:
         int sno;
         cin>>sno;
         Theatre* theatre=Theatres[sno-1];
-        int i=1;
+        i=1;
         cout<<"S ";
         for(int j=1;j<theatre->get_Columns();j++){
             cout<<j<<" ";
@@ -863,7 +874,7 @@ int main(){
                 Admin a;
 
                 a.add_theatre(name,location,city,capacity,o_name,rows,columns);
-                delete &a;
+                // delete &a;
 
             }
             else if(type == 2){
@@ -915,7 +926,7 @@ int main(){
                 cin >> overview;
                 Admin a;
                 a.add_show(theatre_name,m_name,start_time,end_time,date,lang,cast,rating,overview);
-                delete &a;
+                // delete &a;
             }
             else if(type == 3){
                 string theatre_name;
@@ -923,7 +934,7 @@ int main(){
                 cin >> theatre_name;
                 Admin a;
                 a.delete_theatre(theatre_name);
-                delete &a;
+                // delete &a;
             }
             else if(type == 4){
                 string movie_name;
@@ -931,7 +942,7 @@ int main(){
                 cin >> movie_name;
                 Admin a;
                 a.delete_movie(movie_name);
-                delete &a;
+                // delete &a;
             }
             else if(type == 5){
                 string theatre_name;
