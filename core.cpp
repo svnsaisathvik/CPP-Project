@@ -481,6 +481,7 @@ public:
         theatre1->set_Capacity(capacity);
         theatre1->set_OwnerName(o_name);
         theatre1->set_Rows(rows);
+        theatre1->set_SeatsTrack(rows,columns); //added seats track in theatre
         theatre1->set_Columns(columns);
         // Booking_Manager b; //why?
         Theatres.push_back(theatre1);
@@ -781,7 +782,7 @@ public:
         seat->Set_row_number(rowNo);
         seat->Set_seat_number(columnNo);
         seat->Set_isAvailable(false);
-        Show* show=theatre->get_ShowsTrack()[showIndex];
+        Show* show=theatre->get_ShowsTrack()[showIndex-1];
         Ticket* ticket=new Ticket();
         ticket->set_Seat(*seat);
         ticket->set_Show(*show);
