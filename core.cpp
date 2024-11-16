@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include<fstream>
 using namespace std;
 // vector<Show*> all_shows;
 class Ticket;
@@ -16,6 +17,12 @@ private:
 
 public:
     // Setter methods
+    Date(int date,int month,int year){
+        this->date=date;
+        this->month=month;
+        this->year=year;
+    }
+    Date()=default;
     void Set_date(int d) {
         this->date = d;
     }
@@ -75,6 +82,11 @@ private:
 
 public:
     // Setter methods
+    Time(int hour,int minute){
+        this->hour=hour;
+        this->minute=minute;
+    }
+    Time()=default;
     void Set_hour(int h) {
         this->hour = h;
     }
@@ -136,6 +148,11 @@ private:
     int seat_number;
     bool isAvailable;
 public:
+    Seat()=default;
+    Seat(int rowNumber,int seatNumber){
+        this->row_number=rowNumber;
+        this->seat_number=seatNumber;
+    }
     void Set_row_number(int n){
         this->row_number = n;
     }
@@ -171,6 +188,15 @@ private:
 
 public:
     // Setter methods
+    Show()=default;
+    Show(string movieName,Date movieDate,Time startTime,Time endTime,string language){
+        this->movie_name=movieName;
+        this->movie_date=movieDate;
+        this->movie_start_time=startTime;
+        this->movie_end_time=endTime;
+        this->language=language;
+    }
+    // Show show(movieName,movieDate,startTime,endTime,language);
     void set_MovieName(string name) {
         this->movie_name = name;
     }
@@ -251,6 +277,12 @@ public:
     // Setter methods
     void set_Name(string theatre_name) {
         this->name = theatre_name;
+    }
+    // Theatre theatre(theatreName,theatreLocation);
+    Theatre()=default;
+    Theatre(string name,string location){
+        this->name=name;
+        this->location=location;
     }
 
     void set_Location(string theatre_location) {
@@ -359,6 +391,12 @@ class Ticket{
         Theatre theatre;
         Show show;
     public:
+        Ticket(Show show,Theatre theatre,Seat seat){
+            this->show=show;
+            this->theatre=theatre;
+            this->seat=seat;
+        }
+        Ticket()=default;
         void set_Show(Show show){
             this->show=show;
         }
@@ -395,7 +433,7 @@ protected:
 public:
 
     void Set_name(string n){
-        this->name = name;
+        this->name = n;
     }
     void Set_age(int a){
         this->age = a;
@@ -444,7 +482,10 @@ public:
     string get_PhoneNumber(){
         return this->phoneNumber;
     }
-    vector<Ticket> get_CustomerBookings(){
+    string get_password(){
+        return this->password;
+    }
+    vector<Ticket>& get_CustomerBookings(){
         return this->CustomerBookings;
     }
     bool match_password(string pass){
@@ -466,6 +507,7 @@ public:
             }
         }
     }
+
     
 };
 
@@ -515,7 +557,7 @@ public:
         }
 
         // If no conflict, proceed to add the show
-        Show *show1 = new Show;
+        Show *show1 = new Show();
         show1->set_MovieName(m_name);
         show1->set_MovieStartTime(start_time);
         show1->set_MovieEndTime(end_time);
@@ -792,7 +834,10 @@ public:
     else if(command==2){
         for(auto &Customer:Customers){
             int i=1;
+            cout<<customer->get_name()<<" "<<customer->get_email()<<" "<<customer->get_PhoneNumber()<<endl;
+            cout<<Customer->get_name()<<" "<<Customer->get_email()<<" "<<Customer->get_PhoneNumber()<<endl;
             if(Customer->get_name()==customer->get_name() and Customer->get_email()==customer->get_email() and Customer->get_PhoneNumber()==customer->get_PhoneNumber()){
+                cout<<Customer->get_CustomerBookings().size()<<endl;
                 for(auto &ticket: Customer->get_CustomerBookings()) {
                     cout << "Booking #" << i++ << endl;
                     cout << "Movie Name: " << ticket.get_Show().get_MovieName() << endl;
@@ -821,9 +866,208 @@ public:
     }     
     
 };
+    void saveCustomers(){
+        ofstream outFile("Customers.txt",ios::app);
+        if(!outFile){
+            cerr<<"Error Opening file.\n";
+            return;
+        }
+        for(const auto& customer:Customers){
+            outFile<< customer->get_name()<<" "<<customer->get_age()<<" "<<customer->get_email()<<" "<<customer->get_PhoneNumber()<<" "<<customer->get_password();
+
+            outFile<<" "<<customer->get_CustomerBookings().size()<<endl;
+            for(auto& ticket:customer->get_CustomerBookings()){
+                outFile<<ticket.get_Show().get_MovieName()<<endl;
+                outFile<<ticket.get_Show().get_MovieDate().get_date()<<" "<<ticket.get_Show().get_MovieDate().get_month()<<" "<<ticket.get_Show().get_MovieDate().get_year()<<endl;
+                outFile<<ticket.get_Show().get_MovieStartTime().get_hour()<<" "<<ticket.get_Show().get_MovieStartTime().get_minute()<<endl;
+                outFile<<ticket.get_Show().get_MovieEndTime().get_hour()<<" "<<ticket.get_Show().get_MovieEndTime().get_minute()<<endl;
+                outFile<<ticket.get_Show().get_Language()<<endl;
+                outFile<<ticket.get_Theatre().get_Name()<<endl;
+                outFile<<ticket.get_Theatre().get_Location()<<endl;
+                outFile<<ticket.get_Seat().get_row_number()<<endl;
+                outFile<<ticket.get_Seat().get_seat_number()<<endl;
+            }
+        }
+    }
+    void loadCustomers(){
+        ifstream inFile("Customers.txt");
+        if(!inFile){
+            return;
+        }
+        string name,email,phoneNumber,password;
+        int age,numBookings;
+        Customers.clear();
+        while(inFile>>name>>age>>email>>phoneNumber>>password>>numBookings){
+            Customer* customer=new Customer(name,age,email,phoneNumber,password);
+            for(int i=0;i<numBookings;i++){
+                cout<<"I went in atleast"<<endl;
+                string movieName,language,theatreName,theatreLocation;
+                int date,month,year,startHour,startMinute,endHour,endMinute;
+                int rowNumber,seatNumber;
+
+                inFile.ignore();
+                getline(inFile,movieName);
+                inFile>>date>>month>>year;
+                cout<<"date: "<<date<<" "<<"month: "<<month<<" "<<"year: "<<year<<endl;
+                inFile>>startHour>>startMinute;
+                cout<<"startHour: "<<startHour<<"startMinute: "<<startMinute<<endl;
+                inFile>>endHour>>endMinute;
+                cout<<"endHour: "<<endHour<<"endMinute: "<<endMinute<<endl;
+                inFile.ignore();
+                getline(inFile,language);
+                cout<<"language: "<<language<<endl;
+                getline(inFile,theatreName);
+                cout<<"theatreName: "<<theatreName<<endl;
+                getline(inFile,theatreLocation);
+                inFile>>rowNumber>>seatNumber;
+                cout<<"rowNumber: "<<rowNumber<<"seatNumber: "<<seatNumber<<endl;
+
+                Date movieDate(date,month,year);
+                Time startTime(startHour,startMinute);
+                Time endTime(endHour,endMinute);
+                Show show(movieName,movieDate,startTime,endTime,language);
+                Theatre theatre(theatreName,theatreLocation);
+                Seat seat(rowNumber,seatNumber);
+                Ticket ticket(show,theatre,seat);
+                cout<<"Pushed "<<i<<"th ticket"<<endl;
+                customer->get_CustomerBookings().push_back(ticket);
+            }
+            cout<<"I am pushing it here also"<<endl;
+            Customers.push_back(customer);
+        }
+
+    }
+void saveMovies(){
+    ofstream outFile("movies.txt",ios::app);
+    if(!outFile){
+        cerr<<"Error Opening file for opening movies"<<endl;
+        return;
+    }
+    set<string> existingMovies;
+    ifstream inFile("movies.txt");
+    string movie;
+    while(getline(inFile,movie)) {
+        if(!movie.empty()){
+            existingMovies.insert(movie);
+        }
+    }
+    inFile.close();
+    for (const auto& movie : Movies) {
+        if (existingMovies.find(movie) == existingMovies.end()) {
+            outFile << movie << endl; // Append movie to the file
+        }
+    }
+
+    outFile.close();
+}
+
+void loadMovies() {
+    ifstream inFile("movies.txt");
+    if(!inFile){
+        cerr<<"Error opening file for loading movies.\n";
+        return;
+    }
+    Movies.clear();
+    string movie;
+    while (getline(inFile, movie)) {
+        if (!movie.empty()) {
+            Movies.push_back(movie);
+        }
+    }
+
+    inFile.close();
+}
+void saveTheatres() {
+    ofstream outFile("Theatres.txt", ios::app);
+    if (!outFile) {
+        cerr << "Error opening file for saving theatres.\n";
+        return;
+    }
+
+    for (const auto& theatre : Theatres) {
+        // Save theatre details
+        outFile << theatre->get_Name() << endl;
+        outFile << theatre->get_Location() << endl;
+        outFile << theatre->get_City() << endl;
+        outFile << theatre->get_Capacity() << endl;
+        outFile << theatre->get_Rows() << endl;
+        outFile << theatre->get_Columns() << endl;
+        outFile << theatre->get_ShowsTrack().size() << endl; // Number of shows
+
+        // Save each show
+        for (const auto& show : theatre->get_ShowsTrack()) {
+            outFile << show->get_MovieName() << endl;
+            Date movieDate = show->get_MovieDate();
+            outFile << movieDate.get_date() << " " << movieDate.get_month() << " " << movieDate.get_year() << endl;
+            Time startTime = show->get_MovieStartTime();
+            outFile << startTime.get_hour() << " " << startTime.get_minute() << endl;
+            Time endTime = show->get_MovieEndTime();
+            outFile << endTime.get_hour() << " " << endTime.get_minute() << endl;
+            outFile << show->get_Language() << endl;
+            outFile << show->get_Cast() << endl;
+            outFile << show->get_Rating() << endl;
+            outFile << show->get_MovieOverview() << endl;
+        }
+    }
+
+    outFile.close();
+    cout << "Theatres and shows saved successfully.\n";
+}
+
+// Function to load theatres and their shows from "Theatres.txt"
+void loadTheatres() {
+    ifstream inFile("Theatres.txt");
+    if (!inFile) {
+        cerr << "Error opening file for loading theatres.\n";
+        return;
+    }
+
+    Theatres.clear(); // Clear existing theatres to avoid duplication
+    string theatreName, location, city, movieName, language, cast, rating, overview;
+    int capacity, rows, columns, numShows, date, month, year, startHour, startMinute, endHour, endMinute;
+
+    while (getline(inFile, theatreName)) { // Read each theatre
+        getline(inFile, location);
+        getline(inFile, city);
+        inFile >> capacity >> rows >> columns >> numShows;
+        inFile.ignore();
+
+        Theatre* theatre = new Theatre(theatreName, location);
+        theatre->set_City(city);
+        theatre->set_Capacity(capacity);
+        theatre->set_Rows(rows);
+        theatre->set_Columns(columns);
+
+        for (int i = 0; i < numShows; ++i) { // Read each show for the theatre
+            getline(inFile, movieName);
+            inFile >> date >> month >> year >> startHour >> startMinute >> endHour >> endMinute;
+            inFile.ignore(); // Ignore newline character after endMinute
+            getline(inFile, language);
+            getline(inFile, cast);
+            getline(inFile, rating);
+            getline(inFile, overview);
+
+            Date movieDate(date, month, year);
+            Time startTime(startHour, startMinute);
+            Time endTime(endHour, endMinute);
+            Show* show = new Show(movieName, movieDate, startTime, endTime, language);
+            show->set_Cast(cast);
+            show->set_Rating(rating);
+            show->set_MovieOverview(overview);
+
+            theatre->add_show(show);
+        }
+
+        Theatres.push_back(theatre);
+    }
+
+    inFile.close();
+}
 
 int main(){
     cout<<"Welcome to BookYourShow.We know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
+    loadCustomers();
+    loadMovies();
     while(1){
         cout << "enter 1 to login as a customer" << endl;
         cout << "enter 2 to login as an admin" << endl;
@@ -963,6 +1207,12 @@ int main(){
         else if(command == 3){
             Booking_Manager b;
             b.add_NewCustomer();
+        }
+        else if(command==4){
+            saveCustomers();
+            saveMovies();
+            saveTheatres();
+            break;
         }
     }
 }
