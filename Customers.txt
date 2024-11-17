@@ -1,13 +1,4 @@
-KhSudhir 19 khsudhir2345@gmail.com 8073165319 Dhyansepadhbsdk 1
-Devara
-24 9 2024
-18 30
-22 10
-Telugu
-Meenakshi
-Makaraina
-2
-2KhSudhir 19 khsudhir2345@gmail.com 8073165319 Dhyansepadhbsdk 2
+KhSudhir 19 khsudhir2345@gmail.com 8073165319 Dhyansepadhbsdk 3
 Devara
 24 9 2024
 18 30
@@ -26,3 +17,31 @@ RoyalMall
 MagadiRoad
 3
 2
+Kanguva
+24 11 2024
+14 20
+17 10
+Tamil
+Venkateswara
+ElectronicCity
+4
+5
+SvnSaiSasthvik 19 svn@gmail.com 7459542468 SathvikTrupti 2
+Kanguva
+24 11 2024
+14 20
+17 10
+Tamil
+Venkateswara
+ElectronicCity
+7
+8
+SeethammaVakitloSirimaaleChettu
+28 11 2024
+8 30
+11 30
+Telugu
+Venkateswara
+ElectronicCity
+10
+10

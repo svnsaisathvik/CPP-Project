@@ -311,13 +311,13 @@ public:
 
     void set_SeatsTrack(int rows,int columns) {
         // this->seats_track = seat_matrix;
-        for(int i=0;i<columns;i++){
+        for(int i=0;i<rows;i++){
             vector<Seat*> row_seats;
-            for(int j=0;j<rows;j++){
+            for(int j=0;j<columns;j++){
                 Seat *seat1 = new Seat;
                 seat1->Set_isAvailable(true);
-                seat1->Set_row_number(j+1);
-                seat1->Set_seat_number(i+1);
+                seat1->Set_row_number(i+1);
+                seat1->Set_seat_number(j+1);
                 row_seats.push_back(seat1);
             }
             this->seats_track.push_back(row_seats);
@@ -765,6 +765,7 @@ public:
                 cout<<it->first<<" "<<it->second<<endl;
             }
             int showIndex;
+            vector<Theatre*> filteredTheatres;
             while(1){
             cout<<"Type the date and month you are looking for(from above list):"<<endl;
             int date,month;
@@ -778,7 +779,8 @@ public:
                         cout<<i++<<". "<<theatre->get_Name()<<" "<<theatre->get_Location()<<" "<<theatre->get_City()<<" "<<theatre->get_Capacity()<<endl;
                         cout<< shows->get_MovieName() << " " 
                                 << shows->get_MovieStartTime().get_hour() << " "<<shows->get_MovieStartTime().get_minute()<<" " 
-                                << shows->get_MovieEndTime().get_hour() <<" "<<shows->get_MovieEndTime().get_minute()<< endl;      
+                                << shows->get_MovieEndTime().get_hour() <<" "<<shows->get_MovieEndTime().get_minute()<< endl;
+                        filteredTheatres.push_back(theatre);      
                     }
                 }
             }
@@ -798,15 +800,16 @@ public:
         cout<<"Type the serial number of the show you want to book"<<endl;
         int sno;
         cin>>sno;
-        Theatre* theatre=Theatres[sno-1];
+        Theatre* theatre=filteredTheatres[sno-1];
         i=1;
         cout<<"S ";
-        for(int j=1;j<theatre->get_Columns();j++){
+        for(int j=1;j<=theatre->get_Columns();j++){
             cout<<j<<" ";
         }
         cout<<endl;
         for(auto &row:theatre->show_SeatsTrack()){
             cout<<i++<<" ";
+            // cout<<"size :"<<row.size()<<endl;
             for(auto& elem:row){
             if(elem->get_isAvailable()){
                 cout<<"A"<<" ";
@@ -867,7 +870,7 @@ public:
     
 };
     void saveCustomers(){
-        ofstream outFile("Customers.txt",ios::app);
+        ofstream outFile("Customers.txt",ios::trunc);
         if(!outFile){
             cerr<<"Error Opening file.\n";
             return;
@@ -938,7 +941,7 @@ public:
 
     }
 void saveMovies(){
-    ofstream outFile("movies.txt",ios::app);
+    ofstream outFile("movies.txt",ios::trunc);
     if(!outFile){
         cerr<<"Error Opening file for opening movies"<<endl;
         return;
@@ -978,7 +981,7 @@ void loadMovies() {
     inFile.close();
 }
 void saveTheatres() {
-    ofstream outFile("Theatres.txt", ios::app);
+    ofstream outFile("Theatres.txt", ios::trunc);
     if (!outFile) {
         cerr << "Error opening file for saving theatres.\n";
         return;
@@ -1035,8 +1038,11 @@ void loadTheatres() {
         Theatre* theatre = new Theatre(theatreName, location);
         theatre->set_City(city);
         theatre->set_Capacity(capacity);
+        cout<<"rows set to "<<rows<<endl;
         theatre->set_Rows(rows);
+        cout<<"columns set to"<<columns<<endl;
         theatre->set_Columns(columns);
+        theatre->set_SeatsTrack(rows,columns);
 
         for (int i = 0; i < numShows; ++i) { // Read each show for the theatre
             getline(inFile, movieName);
@@ -1068,10 +1074,12 @@ int main(){
     cout<<"Welcome to BookYourShow.We know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
     loadCustomers();
     loadMovies();
+    loadTheatres();
     while(1){
         cout << "enter 1 to login as a customer" << endl;
         cout << "enter 2 to login as an admin" << endl;
         cout << "enter 3 to signup" << endl;
+        cout<<" enter 4 to exit" << endl;
         int command;
         cin >> command;
         if(command == 1){
