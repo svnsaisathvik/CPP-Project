@@ -712,7 +712,7 @@ public:
         string email;
         bool found=false;
         Customer *cust1 = new Customer;
-        cout << "enter email id: ";
+        cout << "Enter email id: ";
         cin >> email; 
         for(auto &it:Customers){
             if(it->get_email()==email){
@@ -729,7 +729,7 @@ public:
             cout << "Enter password: " << endl;
             cin >> pass;
             if(!(cust1->match_password(pass))){
-                cout << "invalid password try again" << endl;//what to do here if the user wants to change the email he has entered??
+                cout << "Invalid password try again" << endl;//what to do here if the user wants to change the email he has entered??
             }
             else{
                 break;
@@ -743,15 +743,14 @@ public:
         int command;
         cin>>command;
         if(command==1){
-            cout<<"Select a movie(enter the serial number of the movie you want to book)"<<endl;
             int i=1;
             for(auto& movie:Movies){
                 cout<<i++<<". "<<movie<<endl;
             }
+            cout<<"Select a movie(enter the serial number of the movie you want to book):"<<endl;
             int index;
             cin>>index;
             string movieName=Movies[index-1];
-            cout<<"Select a date for the movie"<<endl;
             set<pair<int,int>> dates;
             for(auto &theatre:Theatres){
                 for(auto &shows:theatre->get_ShowsTrack()){
@@ -760,6 +759,7 @@ public:
                     }
                 }
             }
+            cout<<"Select a date for the movie"<<endl;
             cout<<"Available Dates"<<endl;
             for(auto it=dates.begin();it!=dates.end();++it){
                 cout<<it->first<<" "<<it->second<<endl;
@@ -771,20 +771,40 @@ public:
             int date,month;
             cin>>date>>month;
             int i=1;
-            for(auto &theatre:Theatres){
-                showIndex=0;
-                for(auto &shows:theatre->get_ShowsTrack()){
+            for (auto &theatre : Theatres) {
+                showIndex = 0;
+                for (auto &shows : theatre->get_ShowsTrack()) {
                     showIndex++;
-                    if(shows->get_MovieName()==movieName && shows->get_MovieDate().get_date()==date && shows->get_MovieDate().get_month()==month){
-                        cout<<i++<<". "<<theatre->get_Name()<<" "<<theatre->get_Location()<<" "<<theatre->get_City()<<" "<<theatre->get_Capacity()<<endl;
-                        cout<< shows->get_MovieName() << " " 
-                                << shows->get_MovieStartTime().get_hour() << " "<<shows->get_MovieStartTime().get_minute()<<" " 
-                                << shows->get_MovieEndTime().get_hour() <<" "<<shows->get_MovieEndTime().get_minute()<< endl;
-                        filteredTheatres.push_back(theatre);      
+                    if (shows->get_MovieName() == movieName && 
+                        shows->get_MovieDate().get_date() == date && 
+                        shows->get_MovieDate().get_month() == month) {
+                        
+                        cout<<"Show :"<<i++<<endl;
+                        cout << "-------------------------------------------------" << endl;
+                        cout << "Theatre " << ":" << endl;
+                        cout << "Name      : " << theatre->get_Name() << endl;
+                        cout << "Location  : " << theatre->get_Location() << endl;
+                        cout << "City      : " << theatre->get_City() << endl;
+                        cout << "Capacity  : " << theatre->get_Capacity() << endl;
+                        cout << "-------------------------------------------------" << endl;
+
+                        // Print show details in a readable format
+                        cout << "Show Details:" << endl;
+                        cout << "Movie Name     : " << shows->get_MovieName() << endl;
+                        cout << "Start Time     : " 
+                            << shows->get_MovieStartTime().get_hour() << ":" 
+                            << setw(2) << setfill('0') << shows->get_MovieStartTime().get_minute() << endl;
+                        cout << "End Time       : " 
+                            << shows->get_MovieEndTime().get_hour() << ":" 
+                            << setw(2) << setfill('0') << shows->get_MovieEndTime().get_minute() << endl;
+                        cout << "-------------------------------------------------" << endl;
+
+                        // Add theatre to the filtered list
+                        filteredTheatres.push_back(theatre);
                     }
                 }
             }
-            cout<<"Type 1 if you want to continue\nType 2 if you want to see on another date\nType 3 if you want to return";
+            cout<<"Type 1 if you want to continue\nType 2 If you want to see on another date\nType 3 If you want to return\n";
             int type;
             cin>>type;
             if(type==1){
@@ -801,25 +821,28 @@ public:
         int sno;
         cin>>sno;
         Theatre* theatre=filteredTheatres[sno-1];
-        i=1;
-        cout<<"S ";
-        for(int j=1;j<=theatre->get_Columns();j++){
-            cout<<j<<" ";
+        i = 1;
+        cout << "   ";
+        for (int j = 1; j <= theatre->get_Columns(); j++) {
+            cout << setw(3) << j;
         }
-        cout<<endl;
-        for(auto &row:theatre->show_SeatsTrack()){
-            cout<<i++<<" ";
-            // cout<<"size :"<<row.size()<<endl;
-            for(auto& elem:row){
-            if(elem->get_isAvailable()){
-                cout<<"A"<<" ";
-            }
-            else{
-                cout<<"NA"<<" ";
-            }
-            }
-            cout<<endl;
+        cout << endl;
+        cout << "   ";
+        for (int j = 1; j <= theatre->get_Columns(); j++) {
+            cout << "---";
         }
+        cout << endl;
+        for (auto &row : theatre->show_SeatsTrack()) {
+            cout << setw(2) << i++ << " | ";  
+            for (auto &elem : row) {
+                cout << (elem->get_isAvailable() ? " A " : "NA ");
+            }
+            cout << endl;
+        }
+        cout << endl << "Legend:" << endl;
+        cout << "A  - Available Seat" << endl;
+        cout << "NA - Not Available Seat" << endl;
+
         cout<<"Please select the row number and column number from the available seats"<<endl;
         int rowNo,columnNo;
         cin>>rowNo>>columnNo;
@@ -837,8 +860,8 @@ public:
     else if(command==2){
         for(auto &Customer:Customers){
             int i=1;
-            cout<<customer->get_name()<<" "<<customer->get_email()<<" "<<customer->get_PhoneNumber()<<endl;
-            cout<<Customer->get_name()<<" "<<Customer->get_email()<<" "<<Customer->get_PhoneNumber()<<endl;
+            // cout<<customer->get_name()<<" "<<customer->get_email()<<" "<<customer->get_PhoneNumber()<<endl;
+            // cout<<Customer->get_name()<<" "<<Customer->get_email()<<" "<<Customer->get_PhoneNumber()<<endl;
             if(Customer->get_name()==customer->get_name() and Customer->get_email()==customer->get_email() and Customer->get_PhoneNumber()==customer->get_PhoneNumber()){
                 cout<<Customer->get_CustomerBookings().size()<<endl;
                 for(auto &ticket: Customer->get_CustomerBookings()) {
@@ -903,7 +926,7 @@ public:
         while(inFile>>name>>age>>email>>phoneNumber>>password>>numBookings){
             Customer* customer=new Customer(name,age,email,phoneNumber,password);
             for(int i=0;i<numBookings;i++){
-                cout<<"I went in atleast"<<endl;
+                // cout<<"I went in atleast"<<endl;
                 string movieName,language,theatreName,theatreLocation;
                 int date,month,year,startHour,startMinute,endHour,endMinute;
                 int rowNumber,seatNumber;
@@ -911,19 +934,19 @@ public:
                 inFile.ignore();
                 getline(inFile,movieName);
                 inFile>>date>>month>>year;
-                cout<<"date: "<<date<<" "<<"month: "<<month<<" "<<"year: "<<year<<endl;
+                // cout<<"date: "<<date<<" "<<"month: "<<month<<" "<<"year: "<<year<<endl;
                 inFile>>startHour>>startMinute;
-                cout<<"startHour: "<<startHour<<"startMinute: "<<startMinute<<endl;
+                // cout<<"startHour: "<<startHour<<"startMinute: "<<startMinute<<endl;
                 inFile>>endHour>>endMinute;
-                cout<<"endHour: "<<endHour<<"endMinute: "<<endMinute<<endl;
+                // cout<<"endHour: "<<endHour<<"endMinute: "<<endMinute<<endl;
                 inFile.ignore();
                 getline(inFile,language);
-                cout<<"language: "<<language<<endl;
+                // cout<<"language: "<<language<<endl;
                 getline(inFile,theatreName);
-                cout<<"theatreName: "<<theatreName<<endl;
+                // cout<<"theatreName: "<<theatreName<<endl;
                 getline(inFile,theatreLocation);
                 inFile>>rowNumber>>seatNumber;
-                cout<<"rowNumber: "<<rowNumber<<"seatNumber: "<<seatNumber<<endl;
+                // cout<<"rowNumber: "<<rowNumber<<"seatNumber: "<<seatNumber<<endl;
 
                 Date movieDate(date,month,year);
                 Time startTime(startHour,startMinute);
@@ -932,10 +955,10 @@ public:
                 Theatre theatre(theatreName,theatreLocation);
                 Seat seat(rowNumber,seatNumber);
                 Ticket ticket(show,theatre,seat);
-                cout<<"Pushed "<<i<<"th ticket"<<endl;
+                // cout<<"Pushed "<<i<<"th ticket"<<endl;
                 customer->get_CustomerBookings().push_back(ticket);
             }
-            cout<<"I am pushing it here also"<<endl;
+            // cout<<"I am pushing it here also"<<endl;
             Customers.push_back(customer);
         }
 
@@ -1014,7 +1037,7 @@ void saveTheatres() {
     }
 
     outFile.close();
-    cout << "Theatres and shows saved successfully.\n";
+    // cout << "Theatres and shows saved successfully.\n";
 }
 
 // Function to load theatres and their shows from "Theatres.txt"
@@ -1038,9 +1061,9 @@ void loadTheatres() {
         Theatre* theatre = new Theatre(theatreName, location);
         theatre->set_City(city);
         theatre->set_Capacity(capacity);
-        cout<<"rows set to "<<rows<<endl;
+        // cout<<"rows set to "<<rows<<endl;
         theatre->set_Rows(rows);
-        cout<<"columns set to"<<columns<<endl;
+        // cout<<"columns set to"<<columns<<endl;
         theatre->set_Columns(columns);
         theatre->set_SeatsTrack(rows,columns);
 
@@ -1071,15 +1094,16 @@ void loadTheatres() {
 }
 
 int main(){
-    cout<<"Welcome to BookYourShow.We know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
+    cout<<"Welcome to BookYourShow.\nWe know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
+    cout<<"----------------------------------------------------------------------------------------------------------------------------------------"<<endl;
     loadCustomers();
     loadMovies();
     loadTheatres();
     while(1){
-        cout << "enter 1 to login as a customer" << endl;
-        cout << "enter 2 to login as an admin" << endl;
-        cout << "enter 3 to signup" << endl;
-        cout<<" enter 4 to exit" << endl;
+        cout << "Enter 1 to login as a Customer" << endl;
+        cout << "Enter 2 to login as an Admin" << endl;
+        cout << "Enter 3 to Signup" << endl;
+        cout<<" Enter 4 to Exit" << endl;
         int command;
         cin >> command;
         if(command == 1){
@@ -1088,16 +1112,16 @@ int main(){
         }
         else if(command == 2){
             string key;
-            cout << "enter the secret key: ";
+            cout << "Enter the secret key: ";
             cin >> key;
             if(key != "123456"){
                 continue;
             }
-            cout << "want to add theatre PRESS 1" << endl;
-            cout << "want to add show PRESS 2" << endl;
-            cout << "want to delete theatre PRESS 3" << endl;
-            cout << "want to delete movie PRESS 4" << endl;
-            cout << "want to delete show PRESS 5" << endl;
+            cout << "Want to add theatre PRESS 1" << endl;
+            cout << "Want to add show PRESS 2" << endl;
+            cout << "Want to delete theatre PRESS 3" << endl;
+            cout << "Want to delete movie PRESS 4" << endl;
+            cout << "Want to delete show PRESS 5" << endl;
             int type;
             cin >> type;
             if(type == 1){
@@ -1183,7 +1207,7 @@ int main(){
             }
             else if(type == 3){
                 string theatre_name;
-                cout << "please enter the theatre name: ";
+                cout << "Please enter the theatre name: ";
                 cin >> theatre_name;
                 Admin a;
                 a.delete_theatre(theatre_name);
@@ -1191,7 +1215,7 @@ int main(){
             }
             else if(type == 4){
                 string movie_name;
-                cout << "please enter movie name: ";
+                cout << "Please enter movie name: ";
                 cin >> movie_name;
                 Admin a;
                 a.delete_movie(movie_name);
