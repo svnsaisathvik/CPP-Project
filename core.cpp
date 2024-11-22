@@ -353,6 +353,9 @@ public:
     int get_Rows() {
         return this->rows;
     }
+    vector<vector<Seat*>> getSeatstrack(){
+        return this->seats_track;
+    }
 
     int get_Columns() {
         return this->columns;
@@ -476,6 +479,9 @@ public:
     }
 
     void bookShow(Ticket ticket){
+        int rowNo=ticket.get_Seat().get_row_number();
+        int columnNo=ticket.get_Seat().get_seat_number();
+        ticket.get_Theatre().getSeatstrack()[rowNo-1][columnNo-1]->Set_isAvailable(false);
         this->CustomerBookings.push_back(ticket);
 
     }
@@ -766,6 +772,7 @@ public:
             }
             int showIndex;
             vector<Theatre*> filteredTheatres;
+            vector<Show*> filteredShows;
             while(1){
             cout<<"Type the date and month you are looking for(from above list):"<<endl;
             int date,month;
@@ -801,6 +808,7 @@ public:
 
                         // Add theatre to the filtered list
                         filteredTheatres.push_back(theatre);
+                        filteredShows.push_back(shows);
                     }
                 }
             }
@@ -850,7 +858,7 @@ public:
         seat->Set_row_number(rowNo);
         seat->Set_seat_number(columnNo);
         seat->Set_isAvailable(false);
-        Show* show=theatre->get_ShowsTrack()[showIndex-1];
+        Show* show=filteredShows[sno-1];
         Ticket* ticket=new Ticket();
         ticket->set_Seat(*seat);
         ticket->set_Show(*show);
@@ -956,7 +964,10 @@ public:
                 Seat seat(rowNumber,seatNumber);
                 Ticket ticket(show,theatre,seat);
                 // cout<<"Pushed "<<i<<"th ticket"<<endl;
+
                 customer->get_CustomerBookings().push_back(ticket);
+
+                
             }
             // cout<<"I am pushing it here also"<<endl;
             Customers.push_back(customer);
@@ -1096,9 +1107,9 @@ void loadTheatres() {
 int main(){
     cout<<"Welcome to BookYourShow.\nWe know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
     cout<<"----------------------------------------------------------------------------------------------------------------------------------------"<<endl;
+    loadTheatres();
     loadCustomers();
     loadMovies();
-    loadTheatres();
     while(1){
         cout << "Enter 1 to login as a Customer" << endl;
         cout << "Enter 2 to login as an Admin" << endl;
