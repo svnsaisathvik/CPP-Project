@@ -1166,12 +1166,22 @@ void loadTheatres() {
     inFile.close();
 }
 
-int main(){
-    cout<<"Welcome to BookYourShow.\nWe know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
-    cout<<"----------------------------------------------------------------------------------------------------------------------------------------"<<endl;
+void Start(){
     loadTheatres();
     loadCustomers();
     loadMovies();
+}
+
+void Save(){
+    saveCustomers();
+    saveTheatres();
+    saveMovies();
+}
+
+int main(){
+    cout<<"Welcome to BookYourShow.\nWe know you are intereseted in movies.Go ahead and grab the seats for your favourite movie as soon as possible!!"<<endl;
+    cout<<"----------------------------------------------------------------------------------------------------------------------------------------"<<endl;
+    Start();
     while(1){
         cout << "Enter 1 to login as a Customer" << endl;
         cout << "Enter 2 to login as an Admin" << endl;
@@ -1314,9 +1324,7 @@ int main(){
             b.add_NewCustomer();
         }
         else if(command==4){
-            saveCustomers();
-            saveMovies();
-            saveTheatres();
+            Save();
             break;
         }
     }
