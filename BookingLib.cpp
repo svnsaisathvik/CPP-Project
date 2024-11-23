@@ -17,7 +17,7 @@ JNIEXPORT void JNICALL Java_BookingSystem_addTheatre(JNIEnv *env,jobject obj,jst
 }
 
 JNIEXPORT void JNICALL Java_BookingSystem_addShow(JNIEnv *env, jobject obj,
-                                                  jstring theatreName, jstring movieName, jstring language,                                                jint startHour, jint startMinute, jint endHour, jint endMinute,                                               jstring cast, jstring rating, jstring overview) {
+                                                  jstring theatreName, jstring movieName, jstring language,jint startHour,jint startMinute,jint endHour,jint endMinute,jstring cast,jstring rating,jstring overview){
     const char *cTheatreName = env->GetStringUTFChars(theatreName, 0);
     const char *cMovieName = env->GetStringUTFChars(movieName, 0);
     const char *cLanguage = env->GetStringUTFChars(language, 0);
@@ -25,12 +25,9 @@ JNIEXPORT void JNICALL Java_BookingSystem_addShow(JNIEnv *env, jobject obj,
     const char *cRating = env->GetStringUTFChars(rating, 0);
     const char *cOverview = env->GetStringUTFChars(overview, 0);
 
-    Admin admin;
-    Time startTime(startHour, startMinute);
-    Time endTime(endHour, endMinute);
-    Date date; 
+    Admin admin; 
 
-    admin.add_show(cTheatreName, cMovieName, startTime, endTime, date, cLanguage, cCast, cRating, cOverview);
+    admin.add_show(cTheatreName, cMovieName, startHour,startMinute,endHour,endMinute,cCast,cRating,cOverview);
 
     env->ReleaseStringUTFChars(theatreName, cTheatreName);
     env->ReleaseStringUTFChars(movieName, cMovieName);
@@ -59,6 +56,37 @@ JNIEXPORT void JNICALL Java_BookingSystem_deleteShow(JNIEnv *env, jobject obj,js
     env->ReleaseStringUTFChars(theatreName,cTheatreName);
 }
 
-JNIEXPORT void JNICALL Java_BookingSystem_deleteShow
+JNIEXPORT void JNICALL Java_BookingSystem_deleteMovie(JNIEnv *env,jobject obj,jstring movieName){
+    const char* cmovieName=env->GetStringUTFChars(theatreName,0);
+    
+    Admin admin;
+    admin.delete_movie(cmovieName);
+
+    env->ReleaseStringUTFChars(cmovieName);
+}
+JNIEXPORT void JNICALL Java_BookingSystem_deleteTheatre(JNIEnv *env,jobject obj,jstring theatreName){
+    const char* cTheatreName=env->GetStringUTFChars(theatreName,0);
+    Admin admin;
+    admin.delete_theatre(cTheatreName);
+}
+
+JNIEXPORT void JNICALL Java_BookingSystem_addNewCustomer(JNIEnv *env,jobject obj){
+    Booking_Manager manager;
+    manager.add_Customer();
+}
+
+JNIEXPORT void JNICALL Java_BookingSystem_handleExistingCustomer(JNIEnv *env,jobject obj){
+    Booking_Manager manager;
+    manager.handleExistingCustomer();
+}
+
+JNIEXPORT void JNICALL Java_BookingSystem_Start(JNIEnv *env,jobject obj){
+    Start();
+}
+
+JNIEXPORT void JNICALL Java_BookingSystem_Save(JNIEnv *env,jobject obj){
+    Save();
+}
+
 
 
