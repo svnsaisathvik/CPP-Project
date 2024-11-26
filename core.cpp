@@ -522,11 +522,7 @@ public:
         int startHour=ticket.get_Show().get_MovieStartTime().get_hour();
         int startMinute=ticket.get_Show().get_MovieStartTime().get_minute();
         for(Theatre* &theatre:Theatres){
-                cout<<"Theatre Name: "<<theatre->get_Name()<<endl;
-                cout<<"Actual "<<theatreName<<endl;
                 if(theatre->get_Name()==theatreName and theatre->get_Location()==theatreLocation){
-                    cout<<"Name: "<<theatre->get_Name()<<endl;
-
                     for(Show* &show:theatre->get_ShowsTrack()){
                         if(show->get_MovieName()==movieName and show->get_MovieDate().get_date()==movieDate.get_date() and show->get_MovieDate().get_month()==movieDate.get_month() and show->get_MovieDate().get_year()==movieDate.get_year() and show->get_MovieStartTime().get_hour()==startHour and show->get_MovieStartTime().get_minute()==startMinute){
                             show->getSeatstrack()[rowNumber-1][seatNumber-1]->Set_isAvailable(false);
@@ -790,8 +786,11 @@ public:
         string email;
         bool found=false;
         Customer *cust1 = new Customer;
-        cout << "Enter email id: ";
+        cout << "Enter email id: or '1200' to exit";
         cin >> email; 
+        if(email=="1200"){
+            return;
+        }
         for(auto &it:Customers){
             if(it->get_email()==email){
                 found=true;
@@ -883,9 +882,8 @@ public:
                         cout << "End Time       : " 
                             << shows->get_MovieEndTime().get_hour() << ":" 
                             << setw(2) << setfill('0') << shows->get_MovieEndTime().get_minute() << endl;
-                        cout<<"Price: "<<shows->getPrice()<<endl;
+                        // cout<<"Price: "<<shows->getPrice()<<endl;
                         cout << "-------------------------------------------------" << endl;
-
                         // Add theatre to the filtered list
                         filteredTheatres.push_back(theatre);
                         filteredShows.push_back(shows);
@@ -1157,6 +1155,7 @@ void saveTheatres() {
             outFile << startTime.get_hour() << " " << startTime.get_minute() << endl;
             Time endTime = show->get_MovieEndTime();
             outFile << endTime.get_hour() << " " << endTime.get_minute() << endl;
+            outFile<<show->getPrice()<<endl;
             outFile << show->get_Language() << endl;
             outFile << show->get_Cast() << endl;
             outFile << show->get_Rating() << endl;
@@ -1180,6 +1179,7 @@ void loadTheatres() {
     Theatres.clear(); // Clear existing theatres to avoid duplication
     string theatreName, location, city, movieName, language, cast, rating, overview;
     int capacity, rows, columns, numShows, date, month, year, startHour, startMinute, endHour, endMinute;
+    double price;
 
     while (getline(inFile, theatreName)) { // Read each theatre
         getline(inFile, location);
@@ -1200,6 +1200,7 @@ void loadTheatres() {
             getline(inFile, movieName);
             inFile >> date >> month >> year >> startHour >> startMinute >> endHour >> endMinute;
             inFile.ignore(); // Ignore newline character after endMinute
+            inFile>>price;
             getline(inFile, language);
             getline(inFile, cast);
             getline(inFile, rating);
