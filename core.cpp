@@ -522,11 +522,7 @@ public:
         int startHour=ticket.get_Show().get_MovieStartTime().get_hour();
         int startMinute=ticket.get_Show().get_MovieStartTime().get_minute();
         for(Theatre* &theatre:Theatres){
-                cout<<"Theatre Name: "<<theatre->get_Name()<<endl;
-                cout<<"Actual "<<theatreName<<endl;
                 if(theatre->get_Name()==theatreName and theatre->get_Location()==theatreLocation){
-                    cout<<"Name: "<<theatre->get_Name()<<endl;
-
                     for(Show* &show:theatre->get_ShowsTrack()){
                         if(show->get_MovieName()==movieName and show->get_MovieDate().get_date()==movieDate.get_date() and show->get_MovieDate().get_month()==movieDate.get_month() and show->get_MovieDate().get_year()==movieDate.get_year() and show->get_MovieStartTime().get_hour()==startHour and show->get_MovieStartTime().get_minute()==startMinute){
                             show->getSeatstrack()[rowNumber-1][seatNumber-1]->Set_isAvailable(false);
