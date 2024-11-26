@@ -1,6 +1,6 @@
 public class BookYourShow {
     static {
-        System.loadLibrary("BookYourShowLib"); // Load the JNI library
+        System.loadLibrary("BookYourShow"); // Load the JNI library
     }
 
     // Native methods for Booking_Manager
@@ -10,7 +10,7 @@ public class BookYourShow {
     // Native methods for Admin
     public native void addTheatre(String name, String location, String city, int capacity, String ownerName, int rows, int columns);
     public native void addShow(String theatreName, String movieName, int startHour, int startMinute, int endHour, int endMinute,
-                               int day, int month, int year, String language, String cast, String rating, String overview);
+                               int day, int month, int year, String language, String cast, String rating, String overview,double price);
     public native void deleteTheatre(String theatreName);
     public native void deleteMovie(String movieName);
     public native void deleteShow(String theatreName, int startHour, int startMinute);
@@ -87,13 +87,15 @@ public class BookYourShow {
                     String language = scanner.next();
                     System.out.print("Enter Cast: ");
                     String cast = scanner.next();
+                    System.out.println("Enter Price of a seat for the show: ");
+                    Double price=scanner.nextDouble();
                     System.out.print("Enter Rating: ");
                     String rating = scanner.next();
                     System.out.print("Enter Overview: ");
                     String overview = scanner.next();
 
                     system.addShow(theatreName, movieName, startHour, startMinute, endHour, endMinute, day, month, year,
-                                   language, cast, rating, overview);
+                                   language, cast, rating, overview,price);
                 } else if (adminCommand == 3) {
                     System.out.print("Enter Theatre Name: ");
                     String theatreName = scanner.next();

@@ -4,9 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\Program Files\\Java\\jdk-23",
-                "C:/Program Files/Java/jdk-23/include",
-                "C:/Program Files/Java/jdk-23/include/win32"
+                "C:/Program Files/Eclipse Adoptium/jdk-17.0.12.7-hotspot/include",
+                "C:/Program Files/Eclipse Adoptium/jdk-17.0.12.7-hotspot/include/win32"
             ],
             "defines": [
                 "_DEBUG",
@@ -18,7 +17,7 @@
             "cppStandard": "gnu++17",
             "intelliSenseMode": "windows-gcc-x64",
             "forcedInclude": [
-                "C:\\Program Files\\Java\\jdk-23\\bin\\java.exe"
+                "C:/Program Files/Eclipse Adoptium/jdk-17.0.12.7-hotspot/include/jni.h"
             ]
         }
     ],

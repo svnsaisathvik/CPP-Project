@@ -34,10 +34,10 @@ JNIEXPORT void JNICALL Java_BookYourShow_addTheatre
 /*
  * Class:     BookYourShow
  * Method:    addShow
- * Signature: (Ljava/lang/String;Ljava/lang/String;IIIIIIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;IIIIIIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;D)V
  */
 JNIEXPORT void JNICALL Java_BookYourShow_addShow
-  (JNIEnv *, jobject, jstring, jstring, jint, jint, jint, jint, jint, jint, jint, jstring, jstring, jstring, jstring);
+  (JNIEnv *, jobject, jstring, jstring, jint, jint, jint, jint, jint, jint, jint, jstring, jstring, jstring, jstring, jdouble);
 
 /*
  * Class:     BookYourShow

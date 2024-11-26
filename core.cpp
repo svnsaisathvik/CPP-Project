@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include<fstream>
 // #include "core.cpp"
+#include <jni.h>
+#include <jni_md.h>
 #include "BookYourShow.h"
 using namespace std;
 // vector<Show*> all_shows;
@@ -78,6 +80,7 @@ public:
     }
 };
 
+// Time class for maintaining hour and minute for different shows
 class Time {
 private:
     int hour;
@@ -128,6 +131,7 @@ public:
 };
 
 
+// comparing time to check if the timings clashes with any other movie
 bool compareTime(Time existingStart, Time existingEnd, Time newStart, Time newEnd) {
     // No conflict if new show ends before or exactly when the existing show starts
     if (newEnd.compare(existingStart) <= 0) {
@@ -144,7 +148,7 @@ bool compareTime(Time existingStart, Time existingEnd, Time newStart, Time newEn
 }
 
 
-
+// Seats to be represented in the theatre 
 class Seat{
 private:
     int row_number;
@@ -179,6 +183,8 @@ public:
 
 };
 
+// Shows class to maintain different shows which has attributes like name,Start Time,End Time,Date 
+// each show will have its own seats track 
 class Show {
 private:
     string movie_name;
@@ -189,6 +195,7 @@ private:
     string cast;
     string rating;
     string movie_overview;
+    double price;
     vector<vector<Seat*>> seats_track;
 
 public:
@@ -224,6 +231,7 @@ public:
     void set_Cast(string cast_members) {
         this->cast = cast_members;
     }
+    // setting seats track for each show
     void set_SeatsTrack(int rows,int columns) {
         // this->seats_track = seat_matrix;
         for(int i=0;i<rows;i++){
@@ -238,6 +246,7 @@ public:
             this->seats_track.push_back(row_seats);
         }
     }
+    // Getter methods
     vector<vector<Seat*>> show_SeatsTrack() {
         return this->seats_track;
     }
@@ -264,6 +273,12 @@ public:
     Time get_MovieEndTime() {
         return this->movie_end_time;
     }
+    void setPrice(double price){
+        this->price=price;
+    }
+    double getPrice(){
+        return this->price;
+    }
 
     string get_Language() {
         return this->language;
@@ -285,6 +300,7 @@ public:
     }
 };
 
+// Theatre with each having its own shows track 
 class Theatre {
 protected:
     string name;
@@ -308,6 +324,7 @@ public:
         this->location=location;
     }
 
+    // setter methods for theatres
     void set_Location(string theatre_location) {
         this->location = theatre_location;
     }
@@ -374,6 +391,7 @@ public:
         return this->shows_track;
     }
 
+    // if we want to delete any show from any theatre
     void delete_show(Time stime){//this should be there already checked
         int j=0;
         Show *show1;
@@ -393,11 +411,13 @@ public:
         cout << "deleted the show sucessfully" << endl;
     }
 };
+// Ticket class to hold the necessary details of the shows for a customer 
 class Ticket{
     protected:
         Seat seat;
         Theatre theatre;
         Show show;
+        double price;
     public:
         Ticket(Show show,Theatre theatre,Seat seat){
             this->show=show;
@@ -413,6 +433,12 @@ class Ticket{
         }
         void set_Theatre(Theatre theatre){
             this->theatre=theatre;
+        }
+        void setPrice(double price){
+            this->price=price;
+        }
+        double getPrice(){
+            return price;
         }
         Seat get_Seat(){
             return seat;
@@ -553,7 +579,7 @@ public:
         // Booking_Manager b; //why?
         Theatres.push_back(theatre1);
     }   
-    void add_show(string theatre_name, string m_name,int start_timehour,int start_timeminute,int end_timehour, int end_timeminute,int dateday, int datemonth,int dateyear, string lang, string cast, string rating, string overview) {
+    void add_show(string theatre_name, string m_name,int start_timehour,int start_timeminute,int end_timehour, int end_timeminute,int dateday, int datemonth,int dateyear, string lang, string cast, string rating, string overview,double price) {
         Theatre *theatre1;
         int changed = 0;
         Date date;
@@ -603,6 +629,7 @@ public:
         show1->set_Language(lang);
         show1->set_Cast(cast);
         show1->set_Rating(rating);
+        show1->setPrice(price);
         show1->set_SeatsTrack(theatre1->get_Rows(),theatre1->get_Columns());
         show1->set_MovieOverview(overview);
 
@@ -716,7 +743,7 @@ public:
 
 
 
-
+// Booking Manager Class to manage all the booking related stuff 
 class Booking_Manager{
 protected:
     
@@ -751,7 +778,7 @@ public:
         }
         for(auto i:Customers){
             if(i->get_email() == email){
-                cout << "other customer already exists if the same email" << endl;
+                cout << "other customer already exists with the same email" << endl;
                 return;
             }
         }
@@ -791,6 +818,7 @@ public:
     void handleBooking(Customer *customer){
         cout<<"Press 1 to book a movie"<<endl;
         cout<<"Press 2 to check your previous bookings or cancel any of the previous bookings"<<endl;
+        cout<<"Press 3 to return."<<endl;
         int command;
         cin>>command;
         if(command==1){
@@ -798,9 +826,12 @@ public:
             for(auto& movie:Movies){
                 cout<<i++<<". "<<movie<<endl;
             }
-            cout<<"Select a movie(enter the serial number of the movie you want to book):"<<endl;
+            cout<<"Select a movie(enter the serial number of the movie you want to book): or press 1200 to exit"<<endl;
             int index;
             cin>>index;
+            if(index==1200){
+                return;
+            }
             string movieName=Movies[index-1];
             set<pair<int,int>> dates;
             for(auto &theatre:Theatres){
@@ -819,9 +850,12 @@ public:
             vector<Theatre*> filteredTheatres;
             vector<Show*> filteredShows;
             while(1){
-            cout<<"Type the date and month you are looking for(from above list):"<<endl;
+            cout<<"Type the date and month you are looking for(from above list): or '1200 0' to exit"<<endl;
             int date,month;
             cin>>date>>month;
+            if(date==1200 and month==0){
+                return;
+            }
             int i=1;
             for (auto &theatre : Theatres) {
                 showIndex = 0;
@@ -849,6 +883,7 @@ public:
                         cout << "End Time       : " 
                             << shows->get_MovieEndTime().get_hour() << ":" 
                             << setw(2) << setfill('0') << shows->get_MovieEndTime().get_minute() << endl;
+                        cout<<"Price: "<<shows->getPrice()<<endl;
                         cout << "-------------------------------------------------" << endl;
 
                         // Add theatre to the filtered list
@@ -897,9 +932,12 @@ public:
         cout << "A  - Available Seat" << endl;
         cout << "NA - Not Available Seat" << endl;
 
-        cout<<"Please select the row number and column number from the available seats"<<endl;
+        cout<<"Please select the row number and column number from the available seats or press '1200 0' to exit"<<endl;
         int rowNo,columnNo;
         cin>>rowNo>>columnNo;
+        if(rowNo==1200 and columnNo==0){
+            return;
+        }
         Seat* seat=new Seat();
         seat->Set_row_number(rowNo);
         seat->Set_seat_number(columnNo);
@@ -908,6 +946,7 @@ public:
         ticket->set_Seat(*seat);
         ticket->set_Show(*show);
         ticket->set_Theatre(*theatre);
+        cout<<"Your Ticket has been booked successfully"<<endl;
         customer->bookShow(*ticket);
         }
     else if(command==2){
@@ -934,6 +973,7 @@ public:
                     cout << "End Time: " 
                         << ticket.get_Show().get_MovieEndTime().get_hour() << ":" 
                         << ticket.get_Show().get_MovieEndTime().get_minute() << endl;
+                    cout<<" Price: " << ticket.get_Show().getPrice()<<endl;
                     cout << "Language: " << ticket.get_Show().get_Language() << endl;
                     cout << "Theatre Name: " << ticket.get_Theatre().get_Name() << endl;
                     cout << "Location: " << ticket.get_Theatre().get_Location() << ", " 
@@ -979,6 +1019,7 @@ public:
                 outFile<<ticket.get_Show().get_MovieDate().get_date()<<" "<<ticket.get_Show().get_MovieDate().get_month()<<" "<<ticket.get_Show().get_MovieDate().get_year()<<endl;
                 outFile<<ticket.get_Show().get_MovieStartTime().get_hour()<<" "<<ticket.get_Show().get_MovieStartTime().get_minute()<<endl;
                 outFile<<ticket.get_Show().get_MovieEndTime().get_hour()<<" "<<ticket.get_Show().get_MovieEndTime().get_minute()<<endl;
+                outFile<<ticket.get_Show().getPrice()<<endl;
                 outFile<<ticket.get_Show().get_Language()<<endl;
                 outFile<<ticket.get_Theatre().get_Name()<<endl;
                 outFile<<ticket.get_Theatre().get_Location()<<endl;
@@ -1002,6 +1043,7 @@ public:
                 string movieName,language,theatreName,theatreLocation;
                 int date,month,year,startHour,startMinute,endHour,endMinute;
                 int rowNumber,seatNumber;
+                double price;
 
                 inFile.ignore();
                 getline(inFile,movieName);
@@ -1011,6 +1053,7 @@ public:
                 // cout<<"startHour: "<<startHour<<"startMinute: "<<startMinute<<endl;
                 inFile>>endHour>>endMinute;
                 // cout<<"endHour: "<<endHour<<"endMinute: "<<endMinute<<endl;
+                inFile>>price;
                 inFile.ignore();
                 getline(inFile,language);
                 // cout<<"language: "<<language<<endl;
@@ -1027,11 +1070,7 @@ public:
                 Theatre theatre(theatreName,theatreLocation);
                 Seat seat(rowNumber,seatNumber,false);
                 for(Theatre* &theatre:Theatres){
-                    cout<<"Theatre Name: "<<theatre->get_Name()<<endl;
-                    cout<<"Actual "<<theatreName<<endl;
                     if(theatre->get_Name()==theatreName and theatre->get_Location()==theatreLocation){
-                        cout<<"Name: "<<theatre->get_Name()<<endl;
-
                         for(Show* &show:theatre->get_ShowsTrack()){
                             if(show->get_MovieName()==movieName and show->get_MovieDate().get_date()==movieDate.get_date() and show->get_MovieDate().get_month()==movieDate.get_month() and show->get_MovieDate().get_year()==movieDate.get_year() and show->get_MovieStartTime().get_hour()==startHour and show->get_MovieStartTime().get_minute()==startMinute){
                                 show->getSeatstrack()[rowNumber-1][seatNumber-1]->Set_isAvailable(false);
@@ -1156,7 +1195,6 @@ void loadTheatres() {
         // cout<<"columns set to"<<columns<<endl;
         theatre->set_Columns(columns);
         // theatre->set_SeatsTrack(rows,columns);
-        cout<<"I came to shows "<<endl;
 
         for (int i = 0; i < numShows; ++i) { // Read each show for the theatre
             getline(inFile, movieName);
@@ -1178,7 +1216,6 @@ void loadTheatres() {
 
             theatre->add_show(show);
         }
-        cout<<"Theatres pushed"<<endl;
         Theatres.push_back(theatre);
     }
 
@@ -1339,39 +1376,56 @@ void Save(){
 
 
 // Add Theatre
-JNIEXPORT void JNICALL Java_BookingSystem_addTheatre(JNIEnv *env, jobject obj,
-                                                     jstring name, jstring location, jstring city,
-                                                     jint capacity, jstring ownerName, jint rows, jint columns) {
-    const char *cName = env->GetStringUTFChars(name, 0);
-    const char *cLocation = env->GetStringUTFChars(location, 0);
-    const char *cCity = env->GetStringUTFChars(city, 0);
-    const char *cOwnerName = env->GetStringUTFChars(ownerName, 0);
+JNIEXPORT void JNICALL Java_BookYourShow_addTheatre(JNIEnv *env, jobject obj,
+                                                    jstring name, jstring location, jstring city,
+                                                    jint capacity, jstring ownerName, jint rows, jint columns) {
+    // Retrieve UTF-8 strings from JNI and convert them to std::string
+    const char *cNameChars = env->GetStringUTFChars(name, 0);
+    const char *cLocationChars = env->GetStringUTFChars(location, 0);
+    const char *cCityChars = env->GetStringUTFChars(city, 0);
+    const char *cOwnerNameChars = env->GetStringUTFChars(ownerName, 0);
 
+    string cName(cNameChars);
+    string cLocation(cLocationChars);
+    string cCity(cCityChars);
+    string cOwnerName(cOwnerNameChars);
+
+    // Call the Admin's add_theatre function
     Admin admin;
     admin.add_theatre(cName, cLocation, cCity, capacity, cOwnerName, rows, columns);
 
-    env->ReleaseStringUTFChars(name, cName);
-    env->ReleaseStringUTFChars(location, cLocation);
-    env->ReleaseStringUTFChars(city, cCity);
-    env->ReleaseStringUTFChars(ownerName, cOwnerName);
+    // Release UTF-8 strings after conversion to std::string
+    env->ReleaseStringUTFChars(name, cNameChars);
+    env->ReleaseStringUTFChars(location, cLocationChars);
+    env->ReleaseStringUTFChars(city, cCityChars);
+    env->ReleaseStringUTFChars(ownerName, cOwnerNameChars);
 }
 
+
 // Add Show
-JNIEXPORT void JNICALL Java_BookingSystem_addShow(JNIEnv *env, jobject obj,
-                                                  jstring theatreName, jstring movieName, jstring language,
-                                                  jint startHour, jint startMinute, jint endHour, jint endMinute,
-                                                  jstring cast, jstring rating, jstring overview) {
-    const char *cTheatreName = env->GetStringUTFChars(theatreName, 0);
-    const char *cMovieName = env->GetStringUTFChars(movieName, 0);
-    const char *cLanguage = env->GetStringUTFChars(language, 0);
-    const char *cCast = env->GetStringUTFChars(cast, 0);
-    const char *cRating = env->GetStringUTFChars(rating, 0);
-    const char *cOverview = env->GetStringUTFChars(overview, 0);
+JNIEXPORT void JNICALL Java_BookYourShow_addShow(JNIEnv *env, jobject obj,
+                                                  jstring theatreName, jstring movieName,
+                                                  jint startHour, jint startMinute, jint endHour, jint endMinute,jint day,jint month,jint year,jstring language,
+                                                  jstring cast, jstring rating, jstring overview,jdouble price) {
+    const char  *cTheatreName= env->GetStringUTFChars(theatreName, 0);
+    const char  *cMovieName = env->GetStringUTFChars(movieName, 0);
+    const char  *cLanguage = env->GetStringUTFChars(language, 0);
+    const char  *cCast = env->GetStringUTFChars(cast, 0);
+    const char  *cRating = env->GetStringUTFChars(rating, 0);
+    const char  *cOverview = env->GetStringUTFChars(overview, 0);
+
+    string ccTheatreName(cTheatreName);
+    string ccMovieName(cMovieName);
+    string ccLanguage(cLanguage);
+    string ccCast(cCast);
+    string ccRating(cRating);
+    string ccOverview(cOverview);
+
 
     Admin admin;
-    admin.add_show(cTheatreName, cMovieName, startHour, startMinute, endHour, endMinute, cCast, cRating, cOverview);
+    admin.add_show(ccTheatreName,ccMovieName,startHour,startMinute,endHour,endMinute,day,month,year,ccLanguage,ccCast,ccRating,ccOverview,price);
 
-    env->ReleaseStringUTFChars(theatreName, cTheatreName);
+    env->ReleaseStringUTFChars(theatreName,cTheatreName);
     env->ReleaseStringUTFChars(movieName, cMovieName);
     env->ReleaseStringUTFChars(language, cLanguage);
     env->ReleaseStringUTFChars(cast, cCast);
@@ -1380,54 +1434,69 @@ JNIEXPORT void JNICALL Java_BookingSystem_addShow(JNIEnv *env, jobject obj,
 }
 
 // Handle Existing Customer
-JNIEXPORT void JNICALL Java_BookingSystem_handleExistingCustomer(JNIEnv *env, jobject obj) {
+JNIEXPORT void JNICALL Java_BookYourShow_handleExistingCustomer(JNIEnv *env, jobject obj) {
     Booking_Manager manager;
     manager.handleExistingCustomer();
 }
 
 // Delete Show
-JNIEXPORT void JNICALL Java_BookingSystem_deleteShow(JNIEnv *env, jobject obj,
-                                                     jstring theatreName, jint startHour, jint startMinute) {
-    const char *cTheatreName = env->GetStringUTFChars(theatreName, 0);
+JNIEXPORT void JNICALL Java_BookYourShow_deleteShow(JNIEnv *env, jobject obj,
+                                                    jstring theatreName, jint startHour, jint startMinute) {
+    // Retrieve UTF-8 string from JNI and convert to std::string
+    const char *cTheatreNameChars = env->GetStringUTFChars(theatreName, 0);
+    string cTheatreName(cTheatreNameChars);
 
+    // Call the Admin's delete_show function
     Admin admin;
     admin.delete_show(cTheatreName, startHour, startMinute);
 
-    env->ReleaseStringUTFChars(theatreName, cTheatreName);
+    // Release UTF-8 string
+    env->ReleaseStringUTFChars(theatreName, cTheatreNameChars);
 }
 
-// Delete Movie
-JNIEXPORT void JNICALL Java_BookingSystem_deleteMovie(JNIEnv *env, jobject obj, jstring movieName) {
-    const char *cMovieName = env->GetStringUTFChars(movieName, 0);
 
+// Delete Movie
+JNIEXPORT void JNICALL Java_BookYourShow_deleteMovie(JNIEnv *env, jobject obj, jstring movieName) {
+    // Retrieve UTF-8 string from JNI and convert to std::string
+    const char *cMovieNameChars = env->GetStringUTFChars(movieName, 0);
+    std::string cMovieName(cMovieNameChars);
+
+    // Call the Admin's delete_movie function
     Admin admin;
     admin.delete_movie(cMovieName);
 
-    env->ReleaseStringUTFChars(movieName, cMovieName);
+    // Release UTF-8 string
+    env->ReleaseStringUTFChars(movieName, cMovieNameChars);
 }
 
-// Delete Theatre
-JNIEXPORT void JNICALL Java_BookingSystem_deleteTheatre(JNIEnv *env, jobject obj, jstring theatreName) {
-    const char *cTheatreName = env->GetStringUTFChars(theatreName, 0);
 
+// Delete Theatre
+JNIEXPORT void JNICALL Java_BookYourShow_deleteTheatre(JNIEnv *env, jobject obj, jstring theatreName) {
+    // Retrieve UTF-8 string from JNI and convert to std::string
+    const char *cTheatreNameChars = env->GetStringUTFChars(theatreName, 0);
+    string cTheatreName(cTheatreNameChars);
+
+    // Call the Admin's delete_theatre function
     Admin admin;
     admin.delete_theatre(cTheatreName);
 
-    env->ReleaseStringUTFChars(theatreName, cTheatreName);
+    // Release UTF-8 string
+    env->ReleaseStringUTFChars(theatreName, cTheatreNameChars);
 }
 
+
 // Add New Customer
-JNIEXPORT void JNICALL Java_BookingSystem_addNewCustomer(JNIEnv *env, jobject obj) {
+JNIEXPORT void JNICALL Java_BookYourShow_addNewCustomer(JNIEnv *env, jobject obj) {
     Booking_Manager manager;
     manager.add_NewCustomer();
 }
 
 // Start System
-JNIEXPORT void JNICALL Java_BookingSystem_Start(JNIEnv *env, jobject obj) {
+JNIEXPORT void JNICALL Java_BookYourShow_start(JNIEnv *env, jobject obj) {
     Start();
 }
 
 // Save System
-JNIEXPORT void JNICALL Java_BookingSystem_Save(JNIEnv *env, jobject obj) {
+JNIEXPORT void JNICALL Java_BookYourShow_save(JNIEnv *env, jobject obj) {
     Save();
 }
