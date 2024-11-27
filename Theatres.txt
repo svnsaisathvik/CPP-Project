@@ -1,3 +1,19 @@
+Meenakshi
+ECity
+Bengaluru
+200
+10
+20
+1
+Devara
+15 12 2024
+13 30
+17 0
+250
+Telugu
+NTR
+4
+JHFFwis
 Sandhya
 Madiwala
 Bengaluru
@@ -5,28 +21,28 @@ Bengaluru
 20
 10
 1
-GameChanger
-15 12 2024
-16 45
-19 25
-0
-
-Telugu
-RamCharan
-3.75
-RC
+Animal
+12 12 2024
+14 30
+17 0
+300
+Hindi
+RanbirKapoor
+4.5
+Fighting
 Shudarshan
 ECity
-0
-20
+Bengaluru
+100
+10
 10
 1
-GameChanger
-15 12 2024
-16 45
-19 25
-0
-
-Telugu
-RamCharan
-3.75
+Interstellar
+31 12 2024
+15 0
+18 40
+300
+English
+Nolan
+5
+Space

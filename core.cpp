@@ -148,7 +148,7 @@ bool compareTime(Time existingStart, Time existingEnd, Time newStart, Time newEn
 }
 
 
-// Seats to be represented in the theatre 
+// Seats to be represented in the Shows
 class Seat{
 private:
     int row_number;
@@ -351,6 +351,7 @@ public:
 
 
 
+    // adding show to a theatre
     void add_show(Show *show1){
         this->shows_track.push_back(show1);
     }
@@ -387,6 +388,7 @@ public:
 
 
 
+    // shows in a theatre
     vector<Show*> get_ShowsTrack() {
         return this->shows_track;
     }
@@ -495,6 +497,7 @@ public:
 
 };
 
+// Customer class for doing the necessary operations of customer like booking the show 
 class Customer: public Person{
 protected:
     string phoneNumber;
@@ -558,10 +561,12 @@ public:
     
 };
 
+// Admin class to manage movies,theatres and shows
 class Admin: public Person{
 protected:
 
 public:
+    // adding thatres in a city
     void add_theatre(string name,string location,string city,int capacity,string o_name,int rows,int columns){
         Theatre *theatre1 = new Theatre();
         theatre1->set_Name(name);
@@ -574,7 +579,8 @@ public:
         theatre1->set_Columns(columns);
         // Booking_Manager b; //why?
         Theatres.push_back(theatre1);
-    }   
+    } 
+    // adding show in a particular theatre  
     void add_show(string theatre_name, string m_name,int start_timehour,int start_timeminute,int end_timehour, int end_timeminute,int dateday, int datemonth,int dateyear, string lang, string cast, string rating, string overview,double price) {
         Theatre *theatre1;
         int changed = 0;
@@ -607,6 +613,7 @@ public:
         }
 
         // Check for time conflicts with existing shows
+        //Checking for time conflict 
         for (auto existing_show : theatre1->get_ShowsTrack()) {
             if (!date.compare(existing_show->get_MovieDate())) { // First, check if the dates are the same  //added a not because it returns 0;
                 if (compareTime(existing_show->get_MovieStartTime(), existing_show->get_MovieEndTime(), start_time, end_time)) {
@@ -640,6 +647,7 @@ public:
     }
 
 
+    // deleting theatres
     void delete_theatre(string theatre_name){
         Theatre *theatre1;
         int changed = 0;
@@ -672,6 +680,7 @@ public:
         Theatres.erase(Theatres.begin()+j);
         delete theatre1;
     }
+    // deleting movie
     void delete_movie(string movie_name){
         int j=0;
         for(auto i: Movies){
@@ -699,6 +708,7 @@ public:
         Movies.erase(Movies.begin()+j);
 
     }
+    // deleting a show 
     void delete_show(string theatre_name,int start_timehour,int start_timeminute){
         Theatre *theatre1;
         int changed = 0;
@@ -780,13 +790,15 @@ public:
         }
         Customer* customer=new Customer(name,age,email,phoneNumber,password);
         Customers.push_back(customer);
+        // after logging in continue with the booking
         handleBooking(customer);
     }
+    // if already registered user is present then proceeding with the authentication
     void handleExistingCustomer(){
         string email;
         bool found=false;
         Customer *cust1 = new Customer;
-        cout << "Enter email id: or '1200' to exit";
+        cout << "Enter email id: or '1200' to exit\n";
         cin >> email; 
         if(email=="1200"){
             return;
@@ -814,6 +826,7 @@ public:
         }
         handleBooking(cust1);
     }
+    // necessary functions for booking movie for a customer
     void handleBooking(Customer *customer){
         cout<<"Press 1 to book a movie"<<endl;
         cout<<"Press 2 to check your previous bookings or cancel any of the previous bookings"<<endl;
@@ -822,6 +835,7 @@ public:
         cin>>command;
         if(command==1){
             int i=1;
+            // display all the movies
             for(auto& movie:Movies){
                 cout<<i++<<". "<<movie<<endl;
             }
@@ -840,6 +854,7 @@ public:
                     }
                 }
             }
+            // Displaying the available dates
             cout<<"Select a date for the movie"<<endl;
             cout<<"Available Dates"<<endl;
             for(auto it=dates.begin();it!=dates.end();++it){
@@ -863,7 +878,7 @@ public:
                     if (shows->get_MovieName() == movieName && 
                         shows->get_MovieDate().get_date() == date && 
                         shows->get_MovieDate().get_month() == month) {
-                        
+                        // displaying show details
                         cout<<"Show :"<<i++<<endl;
                         cout << "-------------------------------------------------" << endl;
                         cout << "Theatre " << ":" << endl;
@@ -882,7 +897,7 @@ public:
                         cout << "End Time       : " 
                             << shows->get_MovieEndTime().get_hour() << ":" 
                             << setw(2) << setfill('0') << shows->get_MovieEndTime().get_minute() << endl;
-                        // cout<<"Price: "<<shows->getPrice()<<endl;
+                        cout<<"Price: "<<shows->getPrice()<<endl;
                         cout << "-------------------------------------------------" << endl;
                         // Add theatre to the filtered list
                         filteredTheatres.push_back(theatre);
@@ -909,6 +924,7 @@ public:
         Theatre* theatre=filteredTheatres[sno-1];
         Show* show=filteredShows[sno-1];
         i = 1;
+        //  displaying the seats
         cout << "   ";
         for (int j = 1; j <= theatre->get_Columns(); j++) {
             cout << setw(3) << j;
@@ -933,6 +949,7 @@ public:
         cout<<"Please select the row number and column number from the available seats or press '1200 0' to exit"<<endl;
         int rowNo,columnNo;
         cin>>rowNo>>columnNo;
+        if(show->getSeatstrack()[rowNo-1][columnNo-1]){
         if(rowNo==1200 and columnNo==0){
             return;
         }
@@ -947,6 +964,10 @@ public:
         cout<<"Your Ticket has been booked successfully"<<endl;
         customer->bookShow(*ticket);
         }
+        else{
+            cout<<"This ticket is already booked.Please try again."<<endl;
+        }
+        }
     else if(command==2){
         int f=0;
         for(auto &Customer:Customers){
@@ -958,6 +979,7 @@ public:
                 if(Customer->get_CustomerBookings().size()>0){
                     f=1;
                 }
+                // displaying the booking details
                 for(auto &ticket: Customer->get_CustomerBookings()) {
                     cout << "Booking #" << i++ << endl;
                     cout << "Movie Name: " << ticket.get_Show().get_MovieName() << endl;
@@ -983,6 +1005,7 @@ public:
 
             }
         }
+        // choice for cancelling the tickets
         cout<<"Do you want to cancel any of the above bookings?\nType 1 if you want to cancel\nType 2 to exit"<<endl;
         int cancelBooking;
         cin>>cancelBooking;
@@ -1002,6 +1025,7 @@ public:
     }     
     
 };
+    // saving customers in a file
     void saveCustomers(){
         ofstream outFile("Customers.txt",ios::trunc);
         if(!outFile){
@@ -1026,6 +1050,7 @@ public:
             }
         }
     }
+    // loading customers from a file 
     void loadCustomers(){
         ifstream inFile("Customers.txt");
         if(!inFile){
@@ -1089,6 +1114,7 @@ public:
         }
 
     }
+// saving movies in a different file
 void saveMovies(){
     ofstream outFile("movies.txt",ios::trunc);
     if(!outFile){
@@ -1112,7 +1138,7 @@ void saveMovies(){
 
     outFile.close();
 }
-
+// loading movies from a file
 void loadMovies() {
     ifstream inFile("movies.txt");
     if(!inFile){
@@ -1129,6 +1155,7 @@ void loadMovies() {
 
     inFile.close();
 }
+// saving theatres in a file
 void saveTheatres() {
     ofstream outFile("Theatres.txt", ios::trunc);
     if (!outFile) {
@@ -1155,7 +1182,8 @@ void saveTheatres() {
             outFile << startTime.get_hour() << " " << startTime.get_minute() << endl;
             Time endTime = show->get_MovieEndTime();
             outFile << endTime.get_hour() << " " << endTime.get_minute() << endl;
-            outFile<<show->getPrice()<<endl;
+            cout<<"Price added: "<<show->getPrice()<<endl;
+            outFile << show->getPrice() << endl;
             outFile << show->get_Language() << endl;
             outFile << show->get_Cast() << endl;
             outFile << show->get_Rating() << endl;
@@ -1201,6 +1229,8 @@ void loadTheatres() {
             inFile >> date >> month >> year >> startHour >> startMinute >> endHour >> endMinute;
             inFile.ignore(); // Ignore newline character after endMinute
             inFile>>price;
+            inFile.ignore();
+            cout<<"While adding from the file the price is : "<<price<<endl;
             getline(inFile, language);
             getline(inFile, cast);
             getline(inFile, rating);
@@ -1214,6 +1244,7 @@ void loadTheatres() {
             show->set_Rating(rating);
             show->set_MovieOverview(overview);
             show->set_SeatsTrack(rows,columns);
+            show->setPrice(price);
 
             theatre->add_show(show);
         }
@@ -1223,12 +1254,14 @@ void loadTheatres() {
     inFile.close();
 }
 
+// Starting the main function with loading every thatres,shows,customer and movies
 void Start(){
     loadTheatres();
     loadCustomers();
     loadMovies();
 }
 
+// saving to a file while exiting
 void Save(){
     saveCustomers();
     saveTheatres();
@@ -1237,7 +1270,7 @@ void Save(){
 
 
 
-
+// JNI Functions to call the functions
 // Add Theatre
 JNIEXPORT void JNICALL Java_BookYourShow_addTheatre(JNIEnv *env, jobject obj,
                                                     jstring name, jstring location, jstring city,
