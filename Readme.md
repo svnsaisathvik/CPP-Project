@@ -192,8 +192,6 @@ Built with a foundation that supports future additions, such as integration of p
 
 ## **Workflow**
 
-## **Workflow**
-
 ### **Flow Chart**
 
 ![Workflow Flowchart](ReadmeAssets/flowchart.png)
