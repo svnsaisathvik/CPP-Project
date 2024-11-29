@@ -202,20 +202,20 @@ Built with a foundation that supports future additions, such as integration of p
 #### Clone the Repository
   git clone [https://github.com/svnsaisathvik/CPP-Project/edit/main/Readme.md]
   cd [CPP-Project]
-### Compile Java Code
-  # Compile the Java file
+#### Compile Java Code
+##### Compile the Java file
   javac BookYourShow.java
 
-  # Generate JNI header file
+##### Generate JNI header file
   javac -h . BookYourShow.java
 
-### Build Native Library For Windows:
+##### Build Native Library For Windows:
    g++ -shared -o BookYourShow.dll core.cpp -I"%JAVA_HOME%/include" -I"%JAVA_HOME%/include/win32"
 
-### Build Native Library for Linux/Mac:
+##### Build Native Library for Linux/Mac:
    g++ -shared -fpic -o libnumberGame.so numberGame.cpp I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux"
 
-### Run the Application:
+##### Run the Application:
    java -Djava.library.path=. BookYourShow
 
   
