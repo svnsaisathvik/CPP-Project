@@ -8,12 +8,12 @@ using namespace std;
 // vector<Show*> all_shows;
 class Ticket;
 class Time;
+class Theatre;
 class Show;
 class Seat;
 class Person;
 class Customer;
 class Admin;
-class Theatre;
 class Date {
 private:
     int date;
@@ -182,6 +182,7 @@ public:
 
 
 };
+
 
 // Shows class to maintain different shows which has attributes like name,Start Time,End Time,Date 
 // each show will have its own seats track 
@@ -763,8 +764,17 @@ public:
         cout<<"Email Id:";
         cin>>email;
         int age;
+        while(1){
         cout<<"Enter your age:";
         cin>>age;
+        if (cin.fail()) { 
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+            cout << "Invalid input. Please enter a valid integer." << endl;
+        } else {
+            break; // Input is valid, exit the loop
+        }
+        }
         string phoneNumber;
         cout<<"Enter phone number:";
         cin>>phoneNumber;
@@ -833,37 +843,50 @@ public:
         cout<<"Press 3 to return."<<endl;
         int command;
         cin>>command;
+        int index;
         if(command==1){
             int i=1;
             // display all the movies
-            for(auto& movie:Movies){
-                cout<<i++<<". "<<movie<<endl;
-            }
-            cout<<"Select a movie(enter the serial number of the movie you want to book): or press 1200 to exit"<<endl;
-            int index;
-            cin>>index;
-            if(index==1200){
-                return;
+            while(1){
+                i=1;
+                for(auto& movie:Movies){
+                    cout<<i++<<". "<<movie<<endl;
+                }
+                cout<<"Select a movie(enter the serial number of the movie you want to book): or press 1200 to exit"<<endl;
+                cin>>index;
+                if(index==1200){
+                    return;
+                }
+                if(index>=i){
+                    cout<<"Please enter a valid serial number"<<endl;
+                    continue;
+                }
+                else{
+                    break;
+                }
             }
             string movieName=Movies[index-1];
             set<pair<int,int>> dates;
+            int dateisPresent=0;
             for(auto &theatre:Theatres){
                 for(auto &shows:theatre->get_ShowsTrack()){
                 if(shows->get_MovieName()==movieName){
+                    dateisPresent=1;
                     dates.insert(make_pair(shows->get_MovieDate().get_date(),shows->get_MovieDate().get_month()));
                     }
                 }
             }
             // Displaying the available dates
+            if(dateisPresent==1){
             cout<<"Select a date for the movie"<<endl;
             cout<<"Available Dates"<<endl;
-            for(auto it=dates.begin();it!=dates.end();++it){
-                cout<<it->first<<" "<<it->second<<endl;
-            }
             int showIndex;
             vector<Theatre*> filteredTheatres;
             vector<Show*> filteredShows;
             while(1){
+            for(auto it=dates.begin();it!=dates.end();++it){
+                cout<<it->first<<" "<<it->second<<endl;
+            }
             cout<<"Type the date and month you are looking for(from above list): or '1200 0' to exit"<<endl;
             int date,month;
             cin>>date>>month;
@@ -871,6 +894,8 @@ public:
                 return;
             }
             int i=1;
+            int showPresent=0;
+            int broke=0;
             for (auto &theatre : Theatres) {
                 showIndex = 0;
                 for (auto &shows : theatre->get_ShowsTrack()) {
@@ -879,6 +904,7 @@ public:
                         shows->get_MovieDate().get_date() == date && 
                         shows->get_MovieDate().get_month() == month) {
                         // displaying show details
+                        showPresent=1;
                         cout<<"Show :"<<i++<<endl;
                         cout << "-------------------------------------------------" << endl;
                         cout << "Theatre " << ":" << endl;
@@ -905,69 +931,107 @@ public:
                     }
                 }
             }
+            if(showPresent==0){
+                if(date>=1 and date<=31 and month>=1 and month<=12){
+                    cout<<"No Shows on this date\nPlease try on a different date"<<endl;
+                    continue;
+                }
+                else{
+                    cout<<"Invalid Date.Please try again"<<endl;
+                    continue;
+                }
+            }
             cout<<"Type 1 if you want to continue\nType 2 If you want to see on another date\nType 3 If you want to return\n";
             int type;
             cin>>type;
             if(type==1){
                 break;
             }
+            else if(type==2){
+                continue;
+            }
             else if(type==3){
+                handleBooking(customer);
                 return;
             }
             else{
+                cout<<"Invalid Command Try Again"<<endl;
                 continue;
             }
         }
-        cout<<"Type the serial number of the show you want to book"<<endl;
         int sno;
+        while(1){
+        cout<<"Type the serial number of the show you want to book"<<endl;
         cin>>sno;
-        Theatre* theatre=filteredTheatres[sno-1];
-        Show* show=filteredShows[sno-1];
-        i = 1;
-        //  displaying the seats
-        cout << "   ";
-        for (int j = 1; j <= theatre->get_Columns(); j++) {
-            cout << setw(3) << j;
-        }
-        cout << endl;
-        cout << "   ";
-        for (int j = 1; j <= theatre->get_Columns(); j++) {
-            cout << "---";
-        }
-        cout << endl;
-        for (auto &row : show->show_SeatsTrack()) {
-            cout << setw(2) << i++ << " | ";  
-            for (auto &elem : row) {
-                cout << (elem->get_isAvailable() ? " A " : "NA ");
-            }
-            cout << endl;
-        }
-        cout << endl << "Legend:" << endl;
-        cout << "A  - Available Seat" << endl;
-        cout << "NA - Not Available Seat" << endl;
-
-        cout<<"Please select the row number and column number from the available seats or press '1200 0' to exit"<<endl;
-        int rowNo,columnNo;
-        cin>>rowNo>>columnNo;
-        if(show->getSeatstrack()[rowNo-1][columnNo-1]){
-        if(rowNo==1200 and columnNo==0){
-            return;
-        }
-        Seat* seat=new Seat();
-        seat->Set_row_number(rowNo);
-        seat->Set_seat_number(columnNo);
-        seat->Set_isAvailable(false);
-        Ticket* ticket=new Ticket();
-        ticket->set_Seat(*seat);
-        ticket->set_Show(*show);
-        ticket->set_Theatre(*theatre);
-        cout<<"Your Ticket has been booked successfully"<<endl;
-        customer->bookShow(*ticket);
+        if(sno>filteredTheatres.size()){
+            cout<<"Incorrect serial number"<<endl;
+            continue;
         }
         else{
-            cout<<"This ticket is already booked.Please try again."<<endl;
+            break;
         }
         }
+        Theatre* theatre=filteredTheatres[sno-1];
+        Show* show=filteredShows[sno-1];
+        while(1){
+            int i = 1;
+            //  displaying the seats
+            cout << "   ";
+            for (int j = 1; j <= theatre->get_Columns(); j++) {
+                cout << setw(3) << j;
+            }
+            cout << endl;
+            cout << "   ";
+            for (int j = 1; j <= theatre->get_Columns(); j++) {
+                cout << "---";
+            }
+            cout << endl;
+            for (auto &row : show->show_SeatsTrack()) {
+                cout << setw(2) << i++ << " | ";  
+                for (auto &elem : row) {
+                    cout << (elem->get_isAvailable() ? " A " : "NA ");
+                }
+                cout << endl;
+            }
+            cout << endl << "Legend:" << endl;
+            cout << "A  - Available Seat" << endl;
+            cout << "NA - Not Available Seat" << endl;
+            cout<<"Please select the row number and column number from the available seats or press '1200 0' to exit"<<endl;
+            int rowNo,columnNo;
+            cin>>rowNo>>columnNo;
+            if(rowNo>=theatre->get_Rows()+1 || columnNo>=theatre->get_Columns()+1){
+                cout<<"Invalid Seat Number.Try Again"<<endl;
+                continue;
+            }
+            if(show->getSeatstrack()[rowNo-1][columnNo-1]->get_isAvailable()){
+            if(rowNo==1200 and columnNo==0){
+                return;
+            }
+            Seat* seat=new Seat();
+            seat->Set_row_number(rowNo);
+            seat->Set_seat_number(columnNo);
+            seat->Set_isAvailable(false);
+            Ticket* ticket=new Ticket();
+            ticket->set_Seat(*seat);
+            ticket->set_Show(*show);
+            ticket->set_Theatre(*theatre);
+            cout<<"Your Ticket has been booked successfully"<<endl;
+            customer->bookShow(*ticket);
+            handleBooking(customer);
+            break;
+            }
+            else{
+                cout<<"This seat is already booked.Please try again."<<endl;
+                continue;
+            }
+        }
+        }
+        else{
+            cout<<"No Shows availaible as of now"<<endl;
+            handleBooking(customer);
+        }
+
+    }
     else if(command==2){
         int f=0;
         for(auto &Customer:Customers){
@@ -1006,22 +1070,43 @@ public:
             }
         }
         // choice for cancelling the tickets
-        cout<<"Do you want to cancel any of the above bookings?\nType 1 if you want to cancel\nType 2 to exit"<<endl;
-        int cancelBooking;
-        cin>>cancelBooking;
-        if(cancelBooking==1){
-            cout<<"Type the serial number of the bookings you want to cancel"<<endl;
-            int no;
-            cin>>no;
-            if(f){
-                customer->cancelBooking(no-1);
+        if(f){
+            cout<<"Do you want to cancel any of the above bookings?\nType 1 if you want to cancel\nType 2 to exit"<<endl;
+            int cancelBooking;
+            cin>>cancelBooking;
+            if(cancelBooking==1){
+                cout<<"Type the serial number of the bookings you want to cancel"<<endl;
+                int no;
+                cin>>no;
+                if(f){
+                    customer->cancelBooking(no-1);
+                    handleBooking(customer);
+                }
+            }
+            else{
                 handleBooking(customer);
             }
         }
         else{
-            return;
+            cout<<"You Don't have any bookings as of now.Type 1 to go to home page or 0 to exit"<<endl;
+            int c;
+            cin>>c;
+            if(c==0){
+                return;
+            }
+            else{
+                handleBooking(customer);
+            }
         }
     }
+    else if(command==3){
+        return;
+    }
+    else{
+        cout<<"Invalid Command.Try Again"<<endl;
+        handleBooking(customer);
+    }
+
     }     
     
 };
@@ -1182,7 +1267,6 @@ void saveTheatres() {
             outFile << startTime.get_hour() << " " << startTime.get_minute() << endl;
             Time endTime = show->get_MovieEndTime();
             outFile << endTime.get_hour() << " " << endTime.get_minute() << endl;
-            cout<<"Price added: "<<show->getPrice()<<endl;
             outFile << show->getPrice() << endl;
             outFile << show->get_Language() << endl;
             outFile << show->get_Cast() << endl;
@@ -1230,7 +1314,6 @@ void loadTheatres() {
             inFile.ignore(); // Ignore newline character after endMinute
             inFile>>price;
             inFile.ignore();
-            cout<<"While adding from the file the price is : "<<price<<endl;
             getline(inFile, language);
             getline(inFile, cast);
             getline(inFile, rating);

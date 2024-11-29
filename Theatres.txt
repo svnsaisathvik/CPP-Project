@@ -4,7 +4,7 @@ Bengaluru
 200
 10
 20
-1
+2
 Devara
 15 12 2024
 13 30
@@ -14,13 +14,22 @@ Telugu
 NTR
 4
 JHFFwis
+Bhool Bulaiya
+26 12 2024
+15 30
+18 30
+280
+Hindi
+Karthik Aryan
+4
+Ghost Story
 Sandhya
 Madiwala
 Bengaluru
 200
 20
 10
-1
+3
 Animal
 12 12 2024
 14 30
@@ -30,6 +39,24 @@ Hindi
 RanbirKapoor
 4.5
 Fighting
+Moooo
+13 11 2024
+14 30
+0 45
+245
+Malyalam
+MohanLal
+5
+Fight
+Bhool Bulaiya
+28 12 2024
+23 30
+1 30
+250
+Hindi
+Karthik Aryan
+4
+Ghost Story
 Shudarshan
 ECity
 Bengaluru
@@ -46,3 +73,10 @@ English
 Nolan
 5
 Space
+Theatre1
+Laggere
+Bengaluru
+200
+20
+10
+0
