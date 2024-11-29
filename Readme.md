@@ -1,321 +1,232 @@
-Movie Ticket Booking System
+# **Movie Ticket Booking System**
 
-# 1. Introduction
+## **Team Details**
 
-## Team Details
+| Name | Roll No | Email |
+|------|---------|-------|
+| SVN Sai Sathvik | IMT2023001 | SVN.Sathvik@iiitb.ac.in |
+| Kh Sudhir | IMT2023546 | Kh.Sudhir@iiitb.ac.in |
+| Kasam Likith | IMT2023573 | Likith.Kasam@iiitb.ac.in |
+| K Jitin | IMT2023057 | KVS.Jitin@iiitb.ac.in |
+| Sai Ganesh | IMT2023525 | Ganesh.Upadrasta@iiitb.ac.in |
+| Kapil Aditya Reddy | IMT2023052 | KKR.Aditya@iiitb.ac.in |
 
-The following table includes the team member details.
+## **Project Overview**
 
-## Project Overview
+The Movie Booking System is a terminal-based application developed to streamline the process of booking movie tickets. Leveraging the interoperability between C++ and Java via JNI, the system provides an efficient and modular design for managing user profiles, available movies, seat selection, and ticket bookings. This implementation ensures simplicity and functionality.
 
-## The Movie Booking System is a terminal-based application developed to streamline the process of booking movie tickets. Leveraging the interoperability between C++ and Java via JNI, the system provides an efficient and modular design for managing user profiles, available movies, seat selection, and ticket bookings. This implementation ensures simplicity and functionality 
+## **Scope**
 
-## Scope
+### **Current Scope**
 
-Current Scope:
+**Core Features:**
+- Displaying available movies and showtimes
+- User registration and authentication for secure access
+- Seat selection and ticket booking through a terminal-based interface
+- Generating and displaying booking receipts
 
-Core Features:
+**Technology Integration:**
+- Combining C++ for backend logic with Java for the main interface using JNI (Java Native Interface)
+- Streamlined execution of cross-language function calls to achieve modular and efficient operations
 
-Displaying available movies and showtimes.
+### **Future Scope**
+- Transition to a Graphical User Interface (GUI) for enhanced user experience
+- Integration of real-time payment systems and e-wallet support
+- Implementation of cloud-based data storage for scalability and multi-user operations
+- Expansion to support multiple concurrent users and advanced ticketing options
+- Development of features for personalized recommendations based on user history
 
-User registration and authentication for secure access.
-
-Seat selection and ticket booking through a terminal-based interface.
-
-Generating and displaying booking receipts.
-
-Technology Integration:
-
-Combining C++ for backend logic with Java for the main interface using JNI (Java Native Interface).
-
-Streamlined execution of cross-language function calls to achieve modular and efficient operations.
-
-
-
-Future Scope:
-
-Transition to a Graphical User Interface (GUI) for enhanced user experience.
-
-Integration of real-time payment systems and e-wallet support.
-
-Implementation of cloud-based data storage for scalability and multi-user operations.
-
-Expansion to support multiple concurrent users and advanced ticketing options.
-
-Development of features for personalized recommendations based on user history.
-
-# 2. Objectives
+## **Objectives**
 
 The main objectives of this project are:
 
-Streamline the Movie Ticket Booking Process:
+1. **Streamline the Movie Ticket Booking Process:**
+   - Develop an efficient system for browsing available movies, selecting seats, and booking tickets
+
+2. **Leverage Language Interoperability:**
+   - Utilize C++ for backend logic and Java for the main interface, connected via JNI, to demonstrate the effective integration of two programming languages
+
+3. **Provide a Modular Design:**
+   - Create a system with well-structured modules for user management, movie management, and booking functionalities, ensuring clarity and scalability
+
+4. **Ensure System Efficiency:**
+   - Design a terminal-based interface that minimizes resource usage while maintaining functionality
+
+5. **Demonstrate Practical Application of Concepts:**
+   - Showcase proficiency in object-oriented programming, file handling, and JNI integration for real-world problem-solving
+
+## **System Overview**
+
+### **Technical Specifications**
+
+**Programming Languages:**
+- **Java:**
+  - Used for the main function and user interaction
+  - Handles the terminal-based interface and orchestrates calls to the backend
+
+- **C++:**
+  - Used for implementing backend logic
+  - Manages core operations like data processing, ticket booking, and database management
 
-Develop an efficient system for browsing available movies, selecting seats, and booking tickets.
+- **JNI (Java Native Interface):**
+  - Bridges communication between Java and C++
 
-Leverage Language Interoperability:
+## **Input/Output Requirements**
 
-Utilize C++ for backend logic and Java for the main interface, connected via JNI, to demonstrate the effective integration of two programming languages.
+### **Input Requirements:**
+- **User Inputs:**
+  - Movie selection (e.g., movie title or ID)
+  - Theatre And Show Selection based on date filter
+  - Seat selection (e.g., row and seat number)
+  - Personal details for booking confirmation
 
-Provide a Modular Design:
+- **Administrative Inputs:**
+  - Movie schedule and details (title, duration, available seats)
+  - Updates to movie availability or pricing
+  - Adding theatre details
 
-Create a system with well-structured modules for user management, movie management, and booking functionalities, ensuring clarity and scalability.
+### **Output Requirements:**
+- **User Outputs:**
+  - Display of available movies and showtimes
+  - Seat layout and availability
+  - Confirmation message with ticket details (movie name, time, seat number)
 
-Ensure System Efficiency:
+- **Administrative Outputs:**
+  - Updated movie schedules
+  - Logs of completed bookings for record-keeping
 
-Design a terminal-based interface that minimizes resource usage while maintaining functionality.
+## **Detailed Features and Use Cases**
 
-Demonstrate Practical Application of Concepts:
+### **User Management**
+- **Features:**
+  - Secure user registration and login
+  - Profile management with access to booking history
 
-Showcase proficiency in object-oriented programming, file handling, and JNI integration for real-world problem-solving
+- **Use Cases:**
+  - **User Registration:**
+    - Actor: User
+    - Flow: User registers with credentials, which the system validates and stores
 
-# 3. System Overview
+  - **Login:**
+    - Actor: User
+    - Flow: User logs in with email and password for access to features
 
-## Technical Specifications
+### **Movie Management**
+- **Features:**
+  - Display available movies with schedules
+  - Search and filter movies by genre or language
 
-Programming Languages:
+- **Use Cases:**
+  - **View Movies:**
+    - Actor: User
+    - Flow: User browses the list of movies with details provided by the system
 
-Java:
+  - **Filter Movies:**
+    - Actor: User
+    - Flow: User applies filters to refine movie selection
 
-Used for the main function and user interaction.
+### **Booking System**
+- **Features:**
+  - Select seats from available options
+  - Generate and display booking confirmation
 
-Handles the terminal-based interface and orchestrates calls to the backend.
+- **Use Cases:**
+  - **Book Tickets:**
+    - Actor: User
+    - Flow: User selects a movie, chooses seats, and confirms the booking
 
-C++:
+  - **Cancel Booking:**
+    - Actor: User
+    - Flow: User cancels an existing booking from "My Bookings"
 
-Used for implementing backend logic.
+### **Administrative Features**
+- **Features:**
+  - Add, update, or remove movies
+  - Maintain booking logs for record-keeping
 
-Manages core operations like data processing, ticket booking, and database management.
+- **Use Cases:**
+  - **Add a Movie:**
+    - Actor: Administrator
+    - Flow: Admin logs in, adds movie details, and updates the schedule
 
-JNI (Java Native Interface):
+### **Error Handling**
+- **Features:**
+  - Validate inputs and prevent duplicate bookings
+  - Display appropriate error messages
 
-Bridges communication between Java and C++.
+- **Use Cases:**
+  - **Handle Invalid Input:**
+    - Actor: User
+    - Flow: System identifies and prompts for correction when an invalid input is entered
 
-## Input/Output Requirements
+## **Non-functional Requirements**
 
-Input Requirements:
+### **Performance:**
+The system is designed to handle operations efficiently in a terminal-based environment, with quick response times for user actions like seat selection and booking confirmation.
 
-User Inputs:
+### **Scalability:**
+Provides a modular structure, making it easy to scale the system for future enhancements, such as adding more functionalities or transitioning to a graphical interface.
 
-Movie selection (e.g., movie title or ID).
+### **Interoperability:**
+Demonstrates seamless interaction between Java and C++ through JNI, ensuring smooth communication between the interface and backend logic.
 
-Theatre And Show Selection based on date filter.
+### **Maintainability:**
+The system uses modular code design, making it easier to debug, update, and enhance specific components like movie management or seat selection.
 
-Seat selection (e.g., row and seat number).
+### **Extensibility:**
+Built with a foundation that supports future additions, such as integration of payment systems, GUI, and real-time database support.
 
-Personal details for booking confirmation.
+## **Development Setup**
 
-Administrative Inputs:
+### **Languages and Technologies:**
+- **C++**: Core backend logic (core.cpp, core.so)
+- **Java**: Frontend and integration via JNI (BookYourShow.java)
 
-Movie schedule and details (title, duration, available seats).
+### **Key Components:**
+- Text Files: (Customers.txt, movies.txt, Theatres.txt) store customer data, movie listings, and theatre details
+- Shared Libraries:
+  - core.so (Linux) / BookYourShow.dll (Windows): Links Java with C++ backend
+- Diagrams: UML design (Final UML Diagram.png)
 
-Updates to movie availability or pricing.
+## **Workflow**
 
-Adding theatre details
+### **Flow Chart**
 
-Output Requirements:
+[Note: Original document referenced two workflow diagrams:
+1. An image in media/image1.png (width: 6.0in, height: 3.4826399825021874in)
+2. An image in media/image2.jpeg (width: 6.0in, height: 4.687498906386701in)
 
-User Outputs:
+These diagrams are not included in the text and would need to be added separately.]
 
-Display of available movies and showtimes.
+The workflow diagrams are expected to illustrate the system's process flow, showing the interactions between different components of the Movie Ticket Booking System, including:
+- User registration and login
+- Movie selection process
+- Seat booking workflow
+- Ticket confirmation steps
+- Administrative operations
 
-Seat layout and availability.
+[Placeholder for workflow diagram descriptions]
 
-Confirmation message with ticket details (movie name, time, seat number).
+## **Important Files & Folders**
 
-Administrative Outputs:
+### **Key files:**
+- **BookYourShow.java:**
+  - Contains the main Java application logic and user interface for the terminal
+  - Acts as the entry point of the program
 
-Updated movie schedules.
+- **core.cpp:**
+  - Implements the core backend logic for movie and seat management in C++
+  - Used for performance-critical operations
 
-Logs of completed bookings for record-keeping.
+### **Data Files:**
+- **Customers.txt:** Stores user information, login credentials, and booking history
+- **movies.txt:** Contains details about available movies, titles, genres, and showtimes
+- **Theatres.txt:** Holds information about theaters, including seating arrangements and availability
 
-# 4. Detailed Features and Use Cases
-
-User Management:
-
-Features:
-
-Secure user registration and login.
-
-Profile management with access to booking history.
-
-Use Cases:
-
-User Registration:
-
-Actor: User
-
-Flow: User registers with credentials, which the system validates and stores.
-
-Login:
-
-Actor: User
-
-Flow: User logs in with email and password for access to features.
-
-Movie Management:
-
-Features:
-
-Display available movies with schedules.
-
-Search and filter movies by genre or language.
-
-Use Cases:
-
-View Movies:
-
-Actor: User
-
-Flow: User browses the list of movies with details provided by the system.
-
-Filter Movies:
-
-Actor: User
-
-Flow: User applies filters to refine movie selection.
-
-Booking System:
-
-Features:
-
-Select seats from available options.
-
-Generate and display booking confirmation.
-
-Use Cases:
-
-Book Tickets:
-
-Actor: User
-
-Flow: User selects a movie, chooses seats, and confirms the booking.
-
-Cancel Booking:
-
-Actor: User
-
-Flow: User cancels an existing booking from "My Bookings."
-
-Administrative Features:
-
-Features:
-
-Add, update, or remove movies.
-
-Maintain booking logs for record-keeping.
-
-Use Cases:
-
-Add a Movie:
-
-Actor: Administrator
-
-Flow: Admin logs in, adds movie details, and updates the schedule.
-
-Error Handling:
-
-Features:
-
-Validate inputs and prevent duplicate bookings.
-
-Display appropriate error messages.
-
-Use Cases:
-
-Handle Invalid Input:
-
-Actor: User
-
-Flow: System identifies and prompts for correction when an invalid input is entered.
-
-
-# 5. Non-functional Requirements
-
-## Performance :
-
-## The system is designed to handle operations efficiently in a terminal-based environment, with quick response times for user actions like seat selection and booking confirmation.
-
-## Scalability:
-Provides a modular structure, making it easy to scale the system for future enhancements, such as adding more functionalities or transitioning to a graphical interface.
-
-
-
-Interoperability:
-
-Demonstrates seamless interaction between Java and C++ through JNI, ensuring smooth communication between the interface and backend logic.
-
-Maintainability:
-The system uses modular code design, making it easier to debug, update, and enhance specific components like movie management or seat selection.
-
-Extensibility:
-Built with a foundation that supports future additions, such as integration of payment systems, GUI, and real-time database support.
-
-
-# 6. Development Setup
-
-Languages and Technologies:
-
-C++: Core backend logic (core.cpp, core.so).
-
-Java: Frontend and integration via JNI (BookYourShow.java).
-
-Key Components:
-
-Text Files: (Customers.txt, movies.txt, Theatres.txt) store customer data, movie listings, and theatre details.
-
-Shared Libraries:
-
-core.so (Linux) / BookYourShow.dll (Windows): Links Java with C++ backend.
-
-Diagrams: UML design (Final UML Diagram.png)
-
-
-
-# 7. Workflow
-
-Flow chart:
-
-
-
-
-
-# 8. Important Files & Folders
-
-Key files in the project include:
-
-BookYourShow.java:
-
-Contains the main Java application logic and user interface for the terminal.
-
-Acts as the entry point of the program.
-
-core.cpp:
-
-Implements the core backend logic for movie and seat management in C++.
-
-Used for performance-critical operations.
-
-Data Files:
-
-Customers.txt:
-
-Stores user information, such as login credentials and booking history.
-
-movies.txt:
-
-Contains details about available movies, such as titles, genres, and showtimes.
-
-Theatres.txt:
-
-Holds information about theaters, including seating arrangements and availability.  
-
-
-
-# 9. Testing & Logging
+## **Testing & Logging**
 
 We will implement unit tests for the core classes (Movie, Show, Seat, Booking) and use logging mechanisms to record booking failures and payment errors.
 
-# 10. Conclusion
+## **Conclusion**
 
 This project aims to develop a user-friendly movie ticket booking system with real-time seat availability, secure payment, and efficient booking confirmation. We expect to deliver a robust system that simplifies the movie ticket booking process for users.
-
