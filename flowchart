@@ -3,6 +3,7 @@ digraph {
 	B [label="Options: Signup or Login"]
 	C [label="Check Previous Bookings or Continue New Booking"]
 	D [label="Display Previous Bookings"]
+	D1 [label="Cancel Bookings"]
 	E [label="Display Available Movies"]
 	F [label="Select Movie"]
 	G [label="Select Date"]
@@ -16,6 +17,7 @@ digraph {
 	B -> C
 	C -> D [label="Check Previous Bookings"]
 	C -> E [label="Continue New Booking"]
+	D -> D1 [label="Cancel Bookings"]
 	E -> F
 	F -> G
 	G -> H

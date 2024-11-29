@@ -1,4 +1,8 @@
 from graphviz import Digraph
+import os
+
+# Set Graphviz executable path
+os.environ["PATH"] += os.pathsep + r"C:\Program Files\Graphviz\bin"
 
 dot = Digraph()
 
@@ -7,6 +11,7 @@ dot.node('A', 'User Logs In')
 dot.node('B', 'Options: Signup or Login')
 dot.node('C', 'Check Previous Bookings or Continue New Booking')
 dot.node('D', 'Display Previous Bookings')
+dot.node('D1', 'Cancel Bookings')  # Added "Cancel Bookings" option
 dot.node('E', 'Display Available Movies')
 dot.node('F', 'Select Movie')
 dot.node('G', 'Select Date')
@@ -22,6 +27,7 @@ dot.edge('A', 'B')
 dot.edge('B', 'C')
 dot.edge('C', 'D', label='Check Previous Bookings')
 dot.edge('C', 'E', label='Continue New Booking')
+dot.edge('D', 'D1', label='Cancel Bookings')  # Added edge for "Cancel Bookings"
 dot.edge('E', 'F')
 dot.edge('F', 'G')
 dot.edge('G', 'H')
