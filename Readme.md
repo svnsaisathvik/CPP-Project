@@ -188,6 +188,25 @@ Built with a foundation that supports future additions, such as integration of p
   - core.so (Linux) / BookYourShow.dll (Windows): Links Java with C++ backend
 - Diagrams: UML design (Final UML Diagram.png)
 
+## **Workflow**
+
+### **Flow Chart**
+
+[Note: Original document referenced two workflow diagrams:
+1. An image in media/image1.png (width: 6.0in, height: 3.4826399825021874in)
+2. An image in media/image2.jpeg (width: 6.0in, height: 4.687498906386701in)
+
+These diagrams are not included in the text and would need to be added separately.]
+
+The workflow diagrams are expected to illustrate the system's process flow, showing the interactions between different components of the Movie Ticket Booking System, including:
+- User registration and login
+- Movie selection process
+- Seat booking workflow
+- Ticket confirmation steps
+- Administrative operations
+
+[Placeholder for workflow diagram descriptions]
+
 ## **Important Files & Folders**
 
 ### **Key files:**
