@@ -186,7 +186,9 @@ Built with a foundation that supports future additions, such as integration of p
 - Text Files: (Customers.txt, movies.txt, Theatres.txt) store customer data, movie listings, and theatre details
 - Shared Libraries:
   - core.so (Linux) / BookYourShow.dll (Windows): Links Java with C++ backend
-- Diagrams: UML design (Final UML Diagram.png)
+- Diagrams: UML design
+
+![UML Diagram](ReadmeAssets/Final%20UML%20Diagram.png)
 
 ## **Workflow**
 
