@@ -201,7 +201,7 @@ Built with a foundation that supports future additions, such as integration of p
 
 #### Clone the Repository
 - git clone [https://github.com/svnsaisathvik/CPP-Project/edit/main/Readme.md]
-- cd [CPP-Project]
+- cd CPP-Project
 #### Compile Java Code
 ##### Compile the Java file
 - javac BookYourShow.java
