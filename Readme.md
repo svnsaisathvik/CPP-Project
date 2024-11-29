@@ -1,16 +1,16 @@
 Movie Ticket Booking System
 
-# 1. Introduction
+# **1. Introduction**
 
-## Team Details
+## **Team Details**
 
 The following table includes the team member details.
 
-## Project Overview
+## **Project Overview**
 
-## The Movie Booking System is a terminal-based application developed to streamline the process of booking movie tickets. Leveraging the interoperability between C++ and Java via JNI, the system provides an efficient and modular design for managing user profiles, available movies, seat selection, and ticket bookings. This implementation ensures simplicity and functionality 
+## **The Movie Booking System is a terminal-based application developed to streamline the process of booking movie tickets. Leveraging the interoperability between C++ and Java via JNI, the system provides an efficient and modular design for managing user profiles, available movies, seat selection, and ticket bookings. This implementation ensures simplicity and functionality **
 
-## Scope
+## **Scope**
 
 Current Scope:
 
@@ -30,8 +30,6 @@ Combining C++ for backend logic with Java for the main interface using JNI (Java
 
 Streamlined execution of cross-language function calls to achieve modular and efficient operations.
 
-
-
 Future Scope:
 
 Transition to a Graphical User Interface (GUI) for enhanced user experience.
@@ -44,7 +42,7 @@ Expansion to support multiple concurrent users and advanced ticketing options.
 
 Development of features for personalized recommendations based on user history.
 
-# 2. Objectives
+# **2. Objectives**
 
 The main objectives of this project are:
 
@@ -68,9 +66,9 @@ Demonstrate Practical Application of Concepts:
 
 Showcase proficiency in object-oriented programming, file handling, and JNI integration for real-world problem-solving
 
-# 3. System Overview
+# **3. System Overview**
 
-## Technical Specifications
+## **Technical Specifications**
 
 Programming Languages:
 
@@ -90,7 +88,7 @@ JNI (Java Native Interface):
 
 Bridges communication between Java and C++.
 
-## Input/Output Requirements
+## **Input/Output Requirements**
 
 Input Requirements:
 
@@ -128,7 +126,7 @@ Updated movie schedules.
 
 Logs of completed bookings for record-keeping.
 
-# 4. Detailed Features and Use Cases
+# **4. Detailed Features and Use Cases**
 
 User Management:
 
@@ -229,16 +227,14 @@ Actor: User
 Flow: System identifies and prompts for correction when an invalid input is entered.
 
 
-# 5. Non-functional Requirements
+# **5. Non-functional Requirements**
 
-## Performance :
+## **Performance :**
 
-## The system is designed to handle operations efficiently in a terminal-based environment, with quick response times for user actions like seat selection and booking confirmation.
+## **The system is designed to handle operations efficiently in a terminal-based environment, with quick response times for user actions like seat selection and booking confirmation.**
 
-## Scalability:
-Provides a modular structure, making it easy to scale the system for future enhancements, such as adding more functionalities or transitioning to a graphical interface.
-
-
+## **Scalability:
+Provides a modular structure, making it easy to scale the system for future enhancements, such as adding more functionalities or transitioning to a graphical interface.**
 
 Interoperability:
 
@@ -251,7 +247,7 @@ Extensibility:
 Built with a foundation that supports future additions, such as integration of payment systems, GUI, and real-time database support.
 
 
-# 6. Development Setup
+# **6. Development Setup**
 
 Languages and Technologies:
 
@@ -269,17 +265,11 @@ core.so (Linux) / BookYourShow.dll (Windows): Links Java with C++ backend.
 
 Diagrams: UML design (Final UML Diagram.png)
 
-
-
-# 7. Workflow
+# **7. Workflow**
 
 Flow chart:
 
-
-
-
-
-# 8. Important Files & Folders
+# **8. Important Files & Folders**
 
 Key files in the project include:
 
@@ -311,11 +301,11 @@ Holds information about theaters, including seating arrangements and availabilit
 
 
 
-# 9. Testing & Logging
+# **9. Testing & Logging**
 
 We will implement unit tests for the core classes (Movie, Show, Seat, Booking) and use logging mechanisms to record booking failures and payment errors.
 
-# 10. Conclusion
+# **10. Conclusion**
 
 This project aims to develop a user-friendly movie ticket booking system with real-time seat availability, secure payment, and efficient booking confirmation. We expect to deliver a robust system that simplifies the movie ticket booking process for users.
 
